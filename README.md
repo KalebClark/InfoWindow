@@ -1,3 +1,6 @@
+![alt text](infowindow.jpg)
+
+
 # Infowindow
 Rapsberry pi powered e-ink display for displaying information in an always on state. There are several other iterations of this project online, but they didnt do quite what I wanted them to. This is my version. Also keeping up my python skills as they dont get used as much as they used to!
 
