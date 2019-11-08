@@ -1,0 +1,14 @@
+{
+    "general": {
+        "rotation": 180
+    },
+    "todo": {
+        "api_key": "1234"
+    },
+    "calendar": null,
+    "weather": {
+        "api_key": "1234",
+        "city": "Sacramento,US",
+        "units": "imperial"
+    }
+}

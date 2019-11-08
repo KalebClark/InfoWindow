@@ -1,0 +1,80 @@
+from driver import epd7in5b
+from PIL import Image
+from PIL import ImageDraw
+from PIL import ImageFont
+import os, sys
+
+class InfoWindow():
+    def __init__(self):
+        self.epd = epd7in5b.EPD()
+        self.epd.init()
+        self.width = 640
+        self.height = 384
+        self.image = Image.new('L', (640, 384), 255)
+        self.draw = ImageDraw.Draw(self.image)
+        self.initFonts()
+
+    def getCWD(self):
+        path = os.path.dirname(os.path.realpath(sys.argv[0]))
+        return path    
+
+    def getImage(self):
+        return self.image
+
+    def getDraw(self):
+        return self.draw
+
+    def getEpd(self):
+        return self.epd
+
+    def line(self, left_1, top_1, left_2, top_2, fill, width=1):
+        self.draw.line((left_1, top_1, left_2, top_2), fill=fill)
+
+    def rectangle(self, tl, tr, bl, br, fill):
+        self.draw.rectangle(((tl, tr), (bl, br)), fill = fill)
+    
+    def text(self, left, top, text, font, fill):
+        font = self.fonts[font]
+        self.draw.text((left, top), text, font = font, fill = fill)
+        return self.draw.textsize(text, font=font)
+
+    def rotate(self, angle):
+        self.image.rotate(angle)
+
+    # def chord(self, x, y, xx, yy, xxx, yyy, fill):
+    #     self.draw.chord((x, y, xx, yy), xxx, yyy, fill)
+
+    def bitmap(self, x, y, image_path):
+        bitmap = Image.open(self.getCWD()+"/icons/"+image_path)
+        #self.image.paste((0, 0), (x, y), 'black', bitmap)
+        self.draw.bitmap((x, y), bitmap)
+
+    def getFont(self, font_name):
+        return self.fonts[font_name]
+
+    def initFonts(self):
+        roboto = self.getCWD()+"/fonts/roboto/Roboto-"
+        self.fonts = {
+
+            'robotoBlack24': ImageFont.truetype(roboto+"Black.ttf", 24),
+            'robotoBlack18': ImageFont.truetype(roboto+"Black.ttf", 18),
+            'robotoRegular18': ImageFont.truetype(roboto+"Regular.ttf", 18),
+            'robotoRegular14': ImageFont.truetype(roboto+"Regular.ttf", 14),
+            'robotoBlack48': ImageFont.truetype(roboto+"Black.ttf", 48)
+        }
+
+    def truncate(self, str, font):
+        num_chars = len(str)
+        for char in str:
+            (np_x, np_y) = self.getFont(font).getsize(str)
+            if np_x >= 235:
+               str = str[:-1]
+
+            if np_x <= 235:
+                return str 
+
+        return str
+
+    def display(self, angle):
+        self.image = self.image.rotate(angle)
+        self.epd.display_frame(self.epd.get_frame_buffer(self.image))
