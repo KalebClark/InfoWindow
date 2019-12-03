@@ -43,8 +43,8 @@ class GoogleAuth:
             logger.info("Credentials do not exist, or are not valid.")
 
             # Requires input from user. Write error to e-ink if is run from cron.
-            if iw_utils.isCron():
-                iw_utils.HandleError("Google Credentials do not exist, or are not valid")
+            # if iw_utils.isCron():
+            #     iw_utils.HandleError("Google Credentials do not exist, or are not valid")
 
             if self.creds and self.creds.expired and self.creds.refresh_token:
                 logging.info("Refreshing Google Auth Credentials")
