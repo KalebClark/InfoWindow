@@ -1,5 +1,5 @@
 from apiclient.discovery import build
-from google_auth_oauthlib.flow import InstalledAppFlow
+from google_auth_oauthlib import flow
 from google.auth.transport.requests import Request
 from mod_utils import iw_utils
 import pickle
@@ -57,11 +57,16 @@ class GoogleAuth:
                 if iw_utils.isCron():
                     iw_utils.HandleError('Message')
 
-                flow = InstalledAppFlow.from_client_secrets_file(
+                appflow = flow.InstalledAppFlow.from_client_secrets_file(
                     google_secrets_file_path, self.scopes
                 )
 
-                self.creds = flow.run_console()
+                if iw_utils.isCron():
+                    appflow.run_local_server()
+                else:
+                    appflow.run_console()
+
+                self.creds = appflow.credentials
             
             # Write pickle file
             logger.info("Writing %s file", pickle_token_file_path)
