@@ -26,11 +26,12 @@ class ToDo:
                 results = service.tasks().list(tasklist=tasklist['id']).execute()
 
                 # Loop through results and format them for ingest
-                for task in results['items']:
-                    items.append({
-                        "content": task['title'],
-                        "priority": task['position']
-                    })
+                if 'items' in results.keys():
+                    for task in results['items']:
+                        items.append({
+                            "content": task['title'],
+                            "priority": task['position']
+                        })
 
         # Return results to main program
         return items
