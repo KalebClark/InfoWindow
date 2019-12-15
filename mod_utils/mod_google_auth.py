@@ -28,7 +28,7 @@ class GoogleAuth:
 
         # Check for pickle.
         # if os.path.exists('token.pickle'):
-        pickle_token_file_path = os.path.join(self.getCWD(), '/token.pickle')
+        pickle_token_file_path = os.path.join(self.getCWD(), 'token.pickle')
         if os.path.exists(pickle_token_file_path):
             logger.info("token.pickle Exists. Attempting read")
             with open(pickle_token_file_path, 'rb') as token:
@@ -52,7 +52,7 @@ class GoogleAuth:
                 self.creds.refresh(Request())
             else:
                 # Check to see if google_secret.json exists. Throw error if not
-                google_secrets_file_path = os.path.join(self.getCWD, '/google_secret.json')
+                google_secrets_file_path = os.path.join(self.getCWD, 'google_secret.json')
                 if not os.path.exists(google_secrets_file_path):
                     logger.info("%s does not exist" % google_secrets_file_path)
 
