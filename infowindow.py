@@ -3,7 +3,6 @@
 import sys
 import json
 import logging
-import traceback
 from mod_infowindow import infowindow
 
 # Select pluggable module for todo list, calendar and weather.
