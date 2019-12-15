@@ -127,7 +127,7 @@ def main():
         c_y = (c_y + 32)
         iw.line(0, (c_y - 2), 313, (c_y - 2), 'black')
         # logging.debug("ITEM: "+str(cal_item['date']), str(cal_item['time']), str(cal_item['content']))
-        logging.debug("ITEM: " + str(cal_item['content']))
+        logging.debug("ITEM: %s" % str(cal_item['content'].encode('utf-8').strip()))
 
     # DISPLAY WEATHER INFO
     # =========================================================================
