@@ -4,7 +4,8 @@ from PIL import ImageDraw
 from PIL import ImageFont
 import os, sys
 
-class InfoWindow():
+
+class InfoWindow:
     def __init__(self):
         self.epd = epd7in5b.EPD()
         self.epd.init()
@@ -46,7 +47,7 @@ class InfoWindow():
 
     def bitmap(self, x, y, image_path):
         bitmap = Image.open(self.getCWD()+"/icons/"+image_path)
-        #self.image.paste((0, 0), (x, y), 'black', bitmap)
+        # self.image.paste((0, 0), (x, y), 'black', bitmap)
         self.draw.bitmap((x, y), bitmap)
 
     def getFont(self, font_name):
