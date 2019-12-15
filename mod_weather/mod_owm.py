@@ -54,8 +54,12 @@ class Weather:
         data = r.json()
 
         # Sunrise and Sunset.
-        sunrise = dt.fromtimestamp(data['sys'].get('sunrise')).strftime('%I:%M%p')
-        sunset  = dt.fromtimestamp(data['sys'].get('sunset')).strftime('%I:%M%p')
+        if self.units == "imperial":
+            sunrise = dt.fromtimestamp(data['sys'].get('sunrise')).strftime('%I:%M %p')
+            sunset  = dt.fromtimestamp(data['sys'].get('sunset')).strftime('%I:%M %p')
+        else:
+            sunrise = dt.fromtimestamp(data['sys'].get('sunrise')).strftime('%H:%M')
+            sunset  = dt.fromtimestamp(data['sys'].get('sunset')).strftime('%H:%M')
 
         # Rain and Snow
         wTypes = ['rain', 'snow']
@@ -103,4 +107,3 @@ class Weather:
 
         
 
-    
