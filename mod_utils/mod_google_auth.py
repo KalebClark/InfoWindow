@@ -28,13 +28,13 @@ class GoogleAuth:
 
         # Check for pickle.
         # if os.path.exists('token.pickle'):
-        file_path = os.path.join(self.getCWD(), '/token.pickle')
-        if os.path.exists(file_path):
+        pickle_token_file_path = os.path.join(self.getCWD(), '/token.pickle')
+        if os.path.exists(pickle_token_file_path):
             logger.info("token.pickle Exists. Attempting read")
-            with open(file_path, 'rb') as token:
+            with open(pickle_token_file_path, 'rb') as token:
                 self.creds = pickle.load(token)
         else:
-            logger.info("%s NOT FOUND" % file_path)
+            logger.info("%s NOT FOUND" % pickle_token_file_path)
         
         # If there are no valid creds, let user login.
         # If we get to this point there is a user interaction that needs
@@ -52,22 +52,23 @@ class GoogleAuth:
                 self.creds.refresh(Request())
             else:
                 # Check to see if google_secret.json exists. Throw error if not
-                if not os.path.exists(self.getCWD+'/google_secret.json'):
-                    logger.info(self.getCWD+"/google_secret.json does not exist")
+                google_secrets_file_path = os.path.join(self.getCWD, '/google_secret.json')
+                if not os.path.exists(google_secrets_file_path):
+                    logger.info("%s does not exist" % google_secrets_file_path)
 
                 # Requires input from user. Write error to e-ink if is run from cron.
                 if iw_utils.isCron():
                     iw_utils.HandleError('Message')
 
                 flow = InstalledAppFlow.from_client_secrets_file(
-                    self.getCWD()+'/google_secret.json', self.scopes
+                    google_secrets_file_path, self.scopes
                 )
 
                 self.creds = flow.run_console()
             
             # Write pickle file
-            logger.info("Writing "+self.getCWD()+"/token.pickle file")
-            with open(self.getCWD()+'/token.pickle', 'wb') as token:
+            logger.info("Writing %s file", pickle_token_file_path)
+            with open(pickle_token_file_path, 'wb') as token:
                 pickle.dump(self.creds, token)
 
         return self.creds
