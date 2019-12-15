@@ -122,8 +122,8 @@ def main():
         (x, y) = iw.text(3, c_y, str(cal_item['date']), 'robotoRegular14', 'black')
         iw.line((dt_x + 5), c_y, (dt_x + 5), (c_y + 32), 'black')
         iw.text(3, (c_y + 15), str(cal_item['time']), 'robotoRegular14', 'black')
-        iw.text((dt_x + 7), (c_y + 5), iw.truncate(str(cal_item['content']), 'robotoRegular18'), 'robotoRegular18',
-                'black')
+        iw.text((dt_x + 7), (c_y + 5), iw.truncate(cal_item['content'].encode('utf-8').strip(), 'robotoRegular18'),
+                'robotoRegular18', 'black')
         c_y = (c_y + 32)
         iw.line(0, (c_y - 2), 313, (c_y - 2), 'black')
         # logging.debug("ITEM: "+str(cal_item['date']), str(cal_item['time']), str(cal_item['content']))
