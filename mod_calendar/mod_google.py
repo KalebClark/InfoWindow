@@ -18,9 +18,9 @@ class Cal:
 
         now = dt.utcnow().isoformat() + 'Z'
         result = service.events().list(calendarId='primary', timeMin=now,
-                            maxResults=20,
-                            singleEvents=True,
-                            orderBy='startTime').execute()
+                                       maxResults=20,
+                                       singleEvents=True,
+                                       orderBy='startTime').execute()
 
         events = result.get('items', [])
 
@@ -37,4 +37,3 @@ class Cal:
             })
 
         return items
-
