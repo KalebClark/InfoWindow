@@ -28,7 +28,7 @@ class GoogleAuth:
 
         # Check for pickle.
         # if os.path.exists('token.pickle'):
-        if os.path.exists(self.getCWD()+'/token.pickle'):
+        if os.path.exists(os.path.join(self.getCWD(),'/token.pickle')):
             logger.info("token.pickle Exists. Attempting read")
             with open(self.getCWD()+'/token.pickle', 'rb') as token:
                 self.creds = pickle.load(token)
