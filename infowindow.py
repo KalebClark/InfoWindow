@@ -11,7 +11,7 @@ from mod_infowindow import infowindow
 # CALENDAR: mod_google, mod_ical
 # WEATHER: mod_owm, mod_wunderground
 from mod_utils import iw_utils
-from mod_todo import mod_todoist as modTodo  # TODO
+from mod_todo import mod_google as modTodo  # TODO
 from mod_calendar import mod_google as modCalendar  # CALENDAR
 from mod_weather import mod_owm as modWeather  # WEATHER
 
