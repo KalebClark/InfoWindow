@@ -28,12 +28,13 @@ class GoogleAuth:
 
         # Check for pickle.
         # if os.path.exists('token.pickle'):
-        if os.path.exists(os.path.join(self.getCWD(),'/token.pickle')):
+        file_path = os.path.join(self.getCWD(), '/token.pickle')
+        if os.path.exists(file_path):
             logger.info("token.pickle Exists. Attempting read")
-            with open(self.getCWD()+'/token.pickle', 'rb') as token:
+            with open(file_path, 'rb') as token:
                 self.creds = pickle.load(token)
         else:
-            logger.info(self.getCWD+"/token.pickle NOT FOUND")
+            logger.info("%s NOT FOUND" % file_path)
         
         # If there are no valid creds, let user login.
         # If we get to this point there is a user interaction that needs
