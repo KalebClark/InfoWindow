@@ -8,7 +8,8 @@
         "api_key": "1234"
     },
     "calendar": {
-        "additional": ["Work"]
+        "additional": ["Contacts"],
+        "ignored": ["Buy ticket!"]
     },
     "weather": {
         "api_key": "1234",

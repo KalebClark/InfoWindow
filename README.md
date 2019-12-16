@@ -41,6 +41,8 @@ config.json to add your api keys and other information.
 ### General
 * rotation: 0 - This is the rotation of the display in degrees. Leave at zero if you use it as a desktop display. Change
 to 180 if you have it mounted and hanging from a shelf.
+* timeformat: 12h / 24h
+* charset: utf-8 (or something else). I.e. to get äöü working, use latin1
 
 ### Todo (Module)
 Todoist is the current active module in this code. It only requires `api_key`. Teamwork also requires a 'site' key. If
@@ -64,6 +66,12 @@ In the google cloud console, do the following things:
    work just fine. Finally, download the json file provided by the google cloud console and store it in the repo
    directory (i.e. `/home/pi/InfoWindow/google_secret.json`) on the Raspberry Pi.  
 
+#### Calendar
+There are are additional sections in the config for this module:
+* additional: A list of additional calendar names (summary) to fetch. To use i.e. birthdays, add "Contacts" (also if
+              you use google in german.
+* ignored: A list of events to be removed from the calendar display.
+        
 ## Running
 ### First Run
 You should run the script manually the first time so that Googles auth modules can run interactivly. Once that has

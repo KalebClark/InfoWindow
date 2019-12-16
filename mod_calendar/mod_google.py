@@ -14,6 +14,7 @@ class Cal:
         self.creds = ga.login()
         self.timeformat = options["timeformat"]
         self.additional = options["additional"]
+        self.ignored = options["ignored"]
 
     def list(self):
         calendar_ids = []
@@ -38,11 +39,13 @@ class Cal:
 
         for id in calendar_ids:
             result = service.events().list(calendarId=id, timeMin=now,
-                                           maxResults=10,
+                                           maxResults=20,
                                            singleEvents=True,
                                            orderBy='startTime').execute()
 
             for event in result.get('items', []):
+                if event['summary'] in self.ignored:
+                    continue
                 start = event['start'].get('dateTime', event['start'].get('date'))
                 if start in events.keys():
                     start = "%sa" % start
