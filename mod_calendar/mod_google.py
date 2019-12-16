@@ -30,7 +30,7 @@ class Cal:
                 if "primary" in calendar_list_entry.keys():
                     if calendar_list_entry['primary']:
                         calendar_ids.append(calendar_list_entry['id'])
-                    elif calendar_list_entry['summary'] == self.additional:
+                    elif calendar_list_entry['summary'] in self.additional:
                         calendar_ids.append(calendar_list_entry['id'])
             page_token = calendar_list.get('nextPageToken')
             if not page_token:
