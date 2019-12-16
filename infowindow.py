@@ -152,9 +152,9 @@ def main():
     iw.text(154, 35, weather['sunset'], 'robotoRegular18', 'black')
 
     # Temp ( adjust for str length )
-    (t_x, t_y) = iw.getFont('robotoBlack48').getsize(weather['temp_cur'].encode('utf-8').strip() + deg_symbol)
+    (t_x, t_y) = iw.getFont('robotoBlack48').getsize(str(weather['temp_cur']) + deg_symbol)
     temp_left = (iw.width / 2) - (t_x / 2)
-    iw.text(temp_left, 2, weather['temp_cur'].encode('utf-8').strip() + deg_symbol, 'robotoBlack48', 'white')
+    iw.text(temp_left, 2, str(weather['temp_cur']) + deg_symbol, 'robotoBlack48', 'white')
     t_desc_posx = (temp_left + t_x) - 15
     iw.text(t_desc_posx, 25, u_temp, 'robotoBlack18', 'white')
 
