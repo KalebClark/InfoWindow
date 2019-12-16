@@ -8,6 +8,7 @@
         "api_key": "1234"
     },
     "calendar": {
+        "additional": ["Work"]
     },
     "weather": {
         "api_key": "1234",
