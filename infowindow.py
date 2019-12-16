@@ -110,7 +110,7 @@ def main():
     t_y = 94
     for todo_item in todo_items:
         iw.text(333, t_y, todo_item['content'].encode(charset).strip(), 'robotoRegular18', 'black')
-        t_y = (t_y + 34)
+        t_y = (t_y + 24)
         iw.line(325, (t_y - 2), 640, (t_y - 2), 'black')
         logging.debug("ITEM: %s" % todo_item['content'].encode(charset).strip())
 
