@@ -160,7 +160,7 @@ def main():
 
     # Wind 
     iw.text(405, 5, weather['wind']['dir'], 'robotoBlack18', 'black')
-    iw.text(380, 35, weather['wind']['speed'].encode('utf-8').strip() + u_speed, 'robotoRegular18', 'black')
+    iw.text(380, 35, str(weather['wind']['speed']) + u_speed, 'robotoRegular18', 'black')
 
     # Rain
     iw.text(481, 29, "1hr: " + weather['rain']['1h'].encode('utf-8').strip(), 'robotoRegular18', 'black')

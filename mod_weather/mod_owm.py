@@ -37,15 +37,15 @@ class Weather:
         return self.pngToBmp(bn)
 
     def degreesToTextDesc(self, deg):
-        if deg > 337.5: return "N"
-        if deg > 292.5: return "NW"
-        if deg > 247.5: return "W"
-        if deg > 202.5: return "SW"
-        if deg > 157.5: return "S"
-        if deg > 122.5: return "SE"
-        if deg >  67.5: return "E"
-        if deg >  22.5: return "NE"
-        return "N"
+        if deg > 337.5: return u"N"
+        if deg > 292.5: return u"NW"
+        if deg > 247.5: return u"W"
+        if deg > 202.5: return u"SW"
+        if deg > 157.5: return u"S"
+        if deg > 122.5: return u"SE"
+        if deg >  67.5: return u"E"
+        if deg >  22.5: return u"NE"
+        return u"N"
 
     def list(self):
         url = 'http://api.openweathermap.org/data/2.5/weather'
