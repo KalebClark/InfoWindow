@@ -1,7 +1,8 @@
 {
     "general": {
         "rotation": 180,
-        "timeformat": "12h"
+        "timeformat": "12h",
+        "charset": "latin1"
     },
     "todo": {
         "api_key": "1234"

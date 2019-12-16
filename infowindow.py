@@ -25,6 +25,7 @@ with open(config_path) as config_file:
 
 # Rotation. 0 for desktop, 180 for hanging upside down
 rotation = config_data["general"]["rotation"]
+charset = config_data["general"]["charset"]
 todo_opts = config_data["todo"]
 calendar_opts = config_data["calendar"]
 weather_opts = config_data["weather"]
@@ -46,7 +47,7 @@ logging.info("Configuration Complete")
 def HandleException(et, val, tb):
     iw = infowindow.InfoWindow()
     iw.text(0, 10, "EXCEPTION IN PROGRAM", 'robotoBlack18', 'black')
-    iw.text(0, 30, val.encode('utf-8').strip(), 'robotoBlack18', 'black')
+    iw.text(0, 30, val.encode(charset).strip(), 'robotoBlack18', 'black')
     iw.text(0, 60, "Please run program from command line interactivly to resolve", 'robotoBlack18', 'black')
     print("EXCEPTION IN PROGRAM ==================================")
     print("error message: %s" % val)
@@ -108,10 +109,10 @@ def main():
     logging.debug("-----------------------------------------------------------------------")
     t_y = 94
     for todo_item in todo_items:
-        iw.text(333, t_y, todo_item['content'].encode('utf-8').strip(), 'robotoRegular18', 'black')
+        iw.text(333, t_y, todo_item['content'].encode(charset).strip(), 'robotoRegular18', 'black')
         t_y = (t_y + 24)
         iw.line(325, (t_y - 2), 640, (t_y - 2), 'black')
-        logging.debug("ITEM: %s" % todo_item['content'].encode('utf-8').strip())
+        logging.debug("ITEM: %s" % todo_item['content'].encode(charset).strip())
 
     # DISPLAY CALENDAR INFO
     # =========================================================================
@@ -124,15 +125,15 @@ def main():
     (dt_x, dt_y) = iw.getFont('robotoRegular14').getsize('12-99-2000')
 
     for cal_item in cal_items:
-        (x, y) = iw.text(3, c_y, cal_item['date'].encode('utf-8').strip(), 'robotoRegular14', 'black')
+        (x, y) = iw.text(3, c_y, cal_item['date'].encode(charset).strip(), 'robotoRegular14', 'black')
         iw.line((dt_x + 5), c_y, (dt_x + 5), (c_y + 32), 'black')
-        iw.text(3, (c_y + 15), cal_item['time'].encode('utf-8').strip(), 'robotoRegular14', 'black')
-        iw.text((dt_x + 7), (c_y + 5), iw.truncate(cal_item['content'].encode('utf-8').strip(), 'robotoRegular18'),
+        iw.text(3, (c_y + 15), cal_item['time'].encode(charset).strip(), 'robotoRegular14', 'black')
+        iw.text((dt_x + 7), (c_y + 5), iw.truncate(cal_item['content'].encode(charset).strip(), 'robotoRegular18'),
                 'robotoRegular18', 'black')
         c_y = (c_y + 32)
         iw.line(0, (c_y - 2), 313, (c_y - 2), 'black')
         # logging.debug("ITEM: "+str(cal_item['date']), str(cal_item['time']), str(cal_item['content']))
-        logging.debug("ITEM: %s" % cal_item['content'].encode('utf-8').strip())
+        logging.debug("ITEM: %s" % cal_item['content'].encode(charset).strip())
 
     # DISPLAY WEATHER INFO
     # =========================================================================
@@ -152,7 +153,7 @@ def main():
 
     deg_symbol = u"\u00b0"
     iw.bitmap(2, 2, weather['icon'])
-    iw.text(70, 2, weather['description'].title().encode('utf-8').strip(), 'robotoBlack24', 'black')
+    iw.text(70, 2, weather['description'].title().encode(charset).strip(), 'robotoBlack24', 'black')
     iw.text(70, 35, weather['sunrise'], 'robotoRegular18', 'black')
     iw.text(154, 35, weather['sunset'], 'robotoRegular18', 'black')
 
