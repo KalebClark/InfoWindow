@@ -18,7 +18,8 @@ from mod_weather import mod_owm as modWeather  # WEATHER
 # TODO: Create dictionaries for API args. so that they can be custom.
 
 # Configuration ###############################################################
-with open(iw_utils.getCWD() + "/config.json") as config_file:
+config_path = os.path.join(iw_utils.getCWD(), "/config.json")
+with open(config_path) as config_file:
     config_data = json.load(config_file)
 
 # Rotation. 0 for desktop, 180 for hanging upside down
@@ -26,6 +27,9 @@ rotation = config_data["general"]["rotation"]
 todo_opts = config_data["todo"]
 calendar_opts = config_data["calendar"]
 weather_opts = config_data["weather"]
+# give the timeformat to all the modules needing it
+calendar_opts["timeformat"] = config_data["general"]["timeformat"]
+weather_opts["timeformat"] = config_data["general"]["timeformat"]
 
 # END CONFIGURATION ###########################################################
 ###############################################################################

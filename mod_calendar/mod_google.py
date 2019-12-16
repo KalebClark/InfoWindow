@@ -9,9 +9,10 @@ logging.getLogger('googleapiclient.discovery_cache').setLevel(logging.ERROR)
 
 
 class Cal:
-    def __init__(self, api_key):
+    def __init__(self, options):
         ga = mod_google_auth.GoogleAuth()
         self.creds = ga.login()
+        self.timeformat = options["timeformat"]
 
     def list(self):
         service = build('calendar', 'v3', credentials=self.creds)
@@ -28,8 +29,15 @@ class Cal:
         items = []
         for event in events:
             start = event['start'].get('dateTime', event['start'].get('date'))
-            st_date = dt.strftime(dtparse(start), format='%m-%d-%Y')
-            st_time = dt.strftime(dtparse(start), format='%I:%M%p')
+
+            # Sunrise and Sunset.
+            if self.timeformat == "12h":
+                st_date = dt.strftime(dtparse(start), format='%m-%d-%Y')
+                st_time = dt.strftime(dtparse(start), format='%I:%M%p')
+            else:
+                st_date = dt.strftime(dtparse(start), format='%d.%m.%Y')
+                st_time = dt.strftime(dtparse(start), format='%H:%M')
+
             items.append({
                 "date": st_date,
                 "time": st_time,

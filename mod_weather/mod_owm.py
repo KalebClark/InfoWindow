@@ -1,7 +1,6 @@
 import requests
 from datetime import datetime as dt
 import os
-import json
 import math
 from PIL import Image
 import logging
@@ -14,6 +13,7 @@ class Weather:
         self.icon_path = "icons/"
         self.city = options['city']
         self.units = options['units']
+        self.timeformat = options['timeformat']
 
     def pngToBmp(self, icon):
         img = Image.open(self.icon_path+str(icon))
@@ -54,7 +54,7 @@ class Weather:
         data = r.json()
 
         # Sunrise and Sunset.
-        if self.units == "imperial":
+        if self.timeformat == "12h":
             sunrise = dt.fromtimestamp(data['sys'].get('sunrise')).strftime('%I:%M %p')
             sunset  = dt.fromtimestamp(data['sys'].get('sunset')).strftime('%I:%M %p')
         else:

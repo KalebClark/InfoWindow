@@ -1,11 +1,13 @@
 {
     "general": {
-        "rotation": 180
+        "rotation": 180,
+        "timeformat": "12h"
     },
     "todo": {
         "api_key": "1234"
     },
-    "calendar": null,
+    "calendar": {
+    },
     "weather": {
         "api_key": "1234",
         "city": "Sacramento,US",
