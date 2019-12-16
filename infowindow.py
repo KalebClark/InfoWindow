@@ -41,7 +41,7 @@ logging.info("Configuration Complete")
 def HandleException(et, val, tb):
     iw = infowindow.InfoWindow()
     iw.text(0, 10, "EXCEPTION IN PROGRAM", 'robotoBlack18', 'black')
-    iw.text(0, 30, str(val), 'robotoBlack18', 'black')
+    iw.text(0, 30, val.encode('utf-8').strip(), 'robotoBlack18', 'black')
     iw.text(0, 60, "Please run program from command line interactivly to resolve", 'robotoBlack18', 'black')
     print("EXCEPTION IN PROGRAM ==================================")
     print("error message: %s" % val)
@@ -103,10 +103,10 @@ def main():
     logging.debug("-----------------------------------------------------------------------")
     t_y = 94
     for todo_item in todo_items:
-        iw.text(333, t_y, str(todo_item['content']), 'robotoRegular18', 'black')
+        iw.text(333, t_y, todo_item['content'].encode('utf-8').strip(), 'robotoRegular18', 'black')
         t_y = (t_y + 24)
         iw.line(325, (t_y - 2), 640, (t_y - 2), 'black')
-        logging.debug("ITEM: " + todo_item['content'])
+        logging.debug("ITEM: %s" % todo_item['content'].encode('utf-8').strip())
 
     # DISPLAY CALENDAR INFO
     # =========================================================================
@@ -119,15 +119,15 @@ def main():
     (dt_x, dt_y) = iw.getFont('robotoRegular14').getsize('12-99-2000')
 
     for cal_item in cal_items:
-        (x, y) = iw.text(3, c_y, str(cal_item['date']), 'robotoRegular14', 'black')
+        (x, y) = iw.text(3, c_y, cal_item['date'].encode('utf-8').strip(), 'robotoRegular14', 'black')
         iw.line((dt_x + 5), c_y, (dt_x + 5), (c_y + 32), 'black')
-        iw.text(3, (c_y + 15), str(cal_item['time']), 'robotoRegular14', 'black')
+        iw.text(3, (c_y + 15), cal_item['time'].encode('utf-8').strip(), 'robotoRegular14', 'black')
         iw.text((dt_x + 7), (c_y + 5), iw.truncate(cal_item['content'].encode('utf-8').strip(), 'robotoRegular18'),
                 'robotoRegular18', 'black')
         c_y = (c_y + 32)
         iw.line(0, (c_y - 2), 313, (c_y - 2), 'black')
         # logging.debug("ITEM: "+str(cal_item['date']), str(cal_item['time']), str(cal_item['content']))
-        logging.debug("ITEM: %s" % str(cal_item['content'].encode('utf-8').strip()))
+        logging.debug("ITEM: %s" % cal_item['content'].encode('utf-8').strip())
 
     # DISPLAY WEATHER INFO
     # =========================================================================
@@ -136,39 +136,39 @@ def main():
     logging.debug("-----------------------------------------------------------------------")
     # Set unit descriptors
     if weather_opts['units'] == 'imperial':
-        u_speed = "mph"
-        u_temp = "F"
+        u_speed = u"mph"
+        u_temp = u"F"
     elif weather_opts['units'] == 'metric':
-        u_speed = "m/sec"
-        u_temp = "C"
+        u_speed = u"m/sec"
+        u_temp = u"C"
     else:
-        u_speed = "m/sec"
-        u_temp = "K"
+        u_speed = u"m/sec"
+        u_temp = u"K"
 
     deg_symbol = u"\u00b0"
     iw.bitmap(2, 2, weather['icon'])
-    iw.text(70, 2, weather['description'].title(), 'robotoBlack24', 'black')
+    iw.text(70, 2, weather['description'].title().encode('utf-8').strip(), 'robotoBlack24', 'black')
     iw.text(70, 35, weather['sunrise'], 'robotoRegular18', 'black')
     iw.text(154, 35, weather['sunset'], 'robotoRegular18', 'black')
 
     # Temp ( adjust for str length )
-    (t_x, t_y) = iw.getFont('robotoBlack48').getsize(str(weather['temp_cur']) + deg_symbol)
+    (t_x, t_y) = iw.getFont('robotoBlack48').getsize(weather['temp_cur'].encode('utf-8').strip() + deg_symbol)
     temp_left = (iw.width / 2) - (t_x / 2)
-    iw.text(temp_left, 2, str(weather['temp_cur']) + deg_symbol, 'robotoBlack48', 'white')
+    iw.text(temp_left, 2, weather['temp_cur'].encode('utf-8').strip() + deg_symbol, 'robotoBlack48', 'white')
     t_desc_posx = (temp_left + t_x) - 15
     iw.text(t_desc_posx, 25, u_temp, 'robotoBlack18', 'white')
 
     # Wind 
     iw.text(405, 5, weather['wind']['dir'], 'robotoBlack18', 'black')
-    iw.text(380, 35, str(weather['wind']['speed']) + u_speed, 'robotoRegular18', 'black')
+    iw.text(380, 35, weather['wind']['speed'].encode('utf-8').strip() + u_speed, 'robotoRegular18', 'black')
 
     # Rain
-    iw.text(481, 29, "1hr: " + str(weather['rain']['1h']), 'robotoRegular18', 'black')
-    iw.text(481, 44, "3hr: " + str(weather['rain']['3h']), 'robotoRegular18', 'black')
+    iw.text(481, 29, "1hr: " + weather['rain']['1h'].encode('utf-8').strip(), 'robotoRegular18', 'black')
+    iw.text(481, 44, "3hr: " + weather['rain']['3h'].encode('utf-8').strip(), 'robotoRegular18', 'black')
 
     # Snow
-    iw.text(573, 29, "1hr: " + str(weather['snow']['1h']), 'robotoRegular18', 'black')
-    iw.text(573, 44, "3hr: " + str(weather['snow']['3h']), 'robotoRegular18', 'black')
+    iw.text(573, 29, "1hr: " + weather['snow']['1h'].encode('utf-8').strip(), 'robotoRegular18', 'black')
+    iw.text(573, 44, "3hr: " + weather['snow']['3h'].encode('utf-8').strip(), 'robotoRegular18', 'black')
 
     # Write to screen
     # =========================================================================
