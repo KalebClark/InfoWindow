@@ -19,7 +19,7 @@ from mod_weather import mod_owm as modWeather  # WEATHER
 # TODO: Create dictionaries for API args. so that they can be custom.
 
 # Configuration ###############################################################
-config_path = os.path.join(iw_utils.getCWD(), "/config.json")
+config_path = os.path.join(iw_utils.getCWD(), "config.json")
 with open(config_path) as config_file:
     config_data = json.load(config_file)
 
