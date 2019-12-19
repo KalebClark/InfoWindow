@@ -26,6 +26,9 @@ to the data. In your face reminder.
   * Open Weather Map current data only. Future plan for forecast data.
 
 ## Installation
+### Raspberry Pi setup
+Activate SPI on your Raspberry Pi by using the `raspi-config` tool under Interface Options and reboot.
+
 ### Get software
 Clone this repo onto your raspberry pi. Does not really matter where it is, but good option is in the `pi` users home
 directory: `/home/pi/InfoWindow`
