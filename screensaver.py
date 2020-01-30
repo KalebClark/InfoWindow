@@ -13,6 +13,7 @@ logging.info("Screen saver starting")
 def main():
     epd = epd7in5b.EPD()
     epd.init()
+    epd.clear()
 
     images = ["red.png", "black.png", "white.png"]
     for image in images:
