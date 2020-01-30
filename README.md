@@ -48,6 +48,12 @@ If you want to increase the lifetime of the SD-Card, add the following line to `
 
 With this line, the `/tmp` folder will be held in RAM and will not be written to the SD-Card.
 
+## Optional: Screen saver 
+Always displaying the same colors at the same spots might have some negative effect on your E-Ink screen. To remedy
+this, there is a simple additional script, which displays all three colors on the whole screen: I recommend to let
+this run once every night, i.e. at 1 minute past 5 with:
+* Run `crontab -e`
+* insert `1 5 * * * /usr/bin/python /home/pi/InfoWindow/screensaver.py /dev/null 2>&1`
 
 ### General
 * rotation: 0 - This is the rotation of the display in degrees. Leave at zero if you use it as a desktop display. Change
