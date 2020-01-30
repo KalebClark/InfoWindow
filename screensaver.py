@@ -6,7 +6,7 @@ from driver import epd7in5b
 from PIL import Image
 
 # Setup Logging -  change to logging.DEBUG if you are having issues.
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 logging.info("Screen saver starting")
 
 
