@@ -39,7 +39,15 @@ ease of installation.
 
 ## Configuration
 You will need to configure a few things such as API Keys and location. Copy config.json-sample to config.json. Edit
-config.json to add your api keys and other information. 
+config.json to add your api keys and other information.
+
+## Optional: Increase lifetime of your SD-Card
+If you want to increase the lifetime of the SD-Card, add the following line to `/etc/fstab` and reboot: 
+
+`tmpfs    /tmp    tmpfs    defaults,noatime,nosuid,size=100m    0 0`
+
+With this line, the `/tmp` folder will be held in RAM and will not be written to the SD-Card.
+
 
 ### General
 * rotation: 0 - This is the rotation of the display in degrees. Leave at zero if you use it as a desktop display. Change

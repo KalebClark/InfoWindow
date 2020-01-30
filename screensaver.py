@@ -13,11 +13,11 @@ def main():
     epd = epd7in5b.EPD()
     epd.init()
     logging.info("Display red")
-    epd.display_frame(self.epd.get_frame_buffer(os.path.join("resources", "red.png")))
+    epd.display_frame(epd.get_frame_buffer(os.path.join("resources", "red.png")))
     logging.info("Display black")
-    epd.display_frame(self.epd.get_frame_buffer(os.path.join("resources", "black.png")))
+    epd.display_frame(epd.get_frame_buffer(os.path.join("resources", "black.png")))
     logging.info("Display white")
-    epd.display_frame(self.epd.get_frame_buffer(os.path.join("resources", "white.png")))
+    epd.display_frame(epd.get_frame_buffer(os.path.join("resources", "white.png")))
     logging.info("Screensaver finished")
 
 
