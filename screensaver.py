@@ -20,6 +20,7 @@ def main():
         image_data = Image.open(os.path.join("resources", image))
         epd.display_frame(epd.get_frame_buffer(image_data))
 
+    epd.sleep()
     logging.info("Screen saver finished")
 
 

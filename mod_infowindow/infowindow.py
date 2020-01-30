@@ -93,5 +93,6 @@ class InfoWindow:
             logging.info("New information in the image detected. Updating the screen.")
             self.image.save(self.tmpImagePath)
             self.epd.display_frame(self.epd.get_frame_buffer(self.image))
+            self.epd.sleep()
         else:
             logging.info("No new information found. Not updating the screen.")
