@@ -2,6 +2,7 @@ import urllib2, base64
 import json
 import logging
 
+
 class ToDo:
     def __init__(self, opts):
         logging.debug("Todo API: TEAMWORK")
@@ -35,9 +36,3 @@ class ToDo:
             })   
 
         return items
-
-            
-
-
-
-

@@ -1,5 +1,4 @@
-from apiclient.discovery import build
-from google_auth_oauthlib.flow import InstalledAppFlow
+from google_auth_oauthlib import flow
 from google.auth.transport.requests import Request
 from mod_utils import iw_utils
 import pickle
@@ -19,21 +18,19 @@ class GoogleAuth:
         ]
 
         self.creds = None
+        self.path = os.path.dirname(os.path.realpath(sys.argv[0]))
 
-    def getCWD(self):
-        path = os.path.dirname(os.path.realpath(sys.argv[0]))
-        return path
-
-    def login(self): 
+    def login(self):
 
         # Check for pickle.
         # if os.path.exists('token.pickle'):
-        if os.path.exists(self.getCWD()+'/token.pickle'):
+        pickle_token_file_path = os.path.join(self.path, 'token.pickle')
+        if os.path.exists(pickle_token_file_path):
             logger.info("token.pickle Exists. Attempting read")
-            with open(self.getCWD()+'/token.pickle', 'rb') as token:
+            with open(pickle_token_file_path, 'rb') as token:
                 self.creds = pickle.load(token)
         else:
-            logger.info(self.getCWD+"/token.pickle NOT FOUND")
+            logger.info("%s NOT FOUND" % pickle_token_file_path)
         
         # If there are no valid creds, let user login.
         # If we get to this point there is a user interaction that needs
@@ -51,22 +48,28 @@ class GoogleAuth:
                 self.creds.refresh(Request())
             else:
                 # Check to see if google_secret.json exists. Throw error if not
-                if not os.path.exists(self.getCWD+'/google_secret.json'):
-                    logger.info(self.getCWD+"/google_secret.json does not exist")
+                google_secrets_file_path = os.path.join(self.path, 'google_secret.json')
+                if not os.path.exists(google_secrets_file_path):
+                    logger.info("%s does not exist" % google_secrets_file_path)
 
                 # Requires input from user. Write error to e-ink if is run from cron.
                 if iw_utils.isCron():
                     iw_utils.HandleError('Message')
 
-                flow = InstalledAppFlow.from_client_secrets_file(
-                    self.getCWD()+'/google_secret.json', self.scopes
+                appflow = flow.InstalledAppFlow.from_client_secrets_file(
+                    google_secrets_file_path, self.scopes
                 )
 
-                self.creds = flow.run_console()
+                if iw_utils.isCron():
+                    appflow.run_local_server()
+                else:
+                    appflow.run_console()
+
+                self.creds = appflow.credentials
             
             # Write pickle file
-            logger.info("Writing "+self.getCWD()+"/token.pickle file")
-            with open(self.getCWD()+'/token.pickle', 'wb') as token:
+            logger.info("Writing %s file", pickle_token_file_path)
+            with open(pickle_token_file_path, 'wb') as token:
                 pickle.dump(self.creds, token)
 
         return self.creds

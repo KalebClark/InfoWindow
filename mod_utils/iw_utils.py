@@ -14,8 +14,8 @@ def getCWD():
 # Custom Error handler. This function will display the error message
 # on the e-ink display and exit. 
 def HandleError(msg):
-    print "ERROR IN PROGRAM ======================================"
-    print "Program requires user input. Please run from console"
-    print "ERR: " + msg
-    print "END ERROR ============================================="
+    print("ERROR IN PROGRAM ======================================")
+    print("Program requires user input. Please run from console")
+    print("ERR: " + msg)
+    print("END ERROR =============================================")
     quit()

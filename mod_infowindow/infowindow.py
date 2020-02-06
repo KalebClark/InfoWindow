@@ -2,9 +2,12 @@ from driver import epd7in5b
 from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
+from PIL import ImageChops
 import os, sys
+import logging
+import tempfile
 
-class InfoWindow():
+class InfoWindow:
     def __init__(self):
         self.epd = epd7in5b.EPD()
         self.epd.init()
@@ -13,6 +16,7 @@ class InfoWindow():
         self.image = Image.new('L', (640, 384), 255)
         self.draw = ImageDraw.Draw(self.image)
         self.initFonts()
+        self.tmpImagePath = os.path.join(tempfile.gettempdir(), "InfoWindow.png")
 
     def getCWD(self):
         path = os.path.dirname(os.path.realpath(sys.argv[0]))
@@ -46,7 +50,7 @@ class InfoWindow():
 
     def bitmap(self, x, y, image_path):
         bitmap = Image.open(self.getCWD()+"/icons/"+image_path)
-        #self.image.paste((0, 0), (x, y), 'black', bitmap)
+        # self.image.paste((0, 0), (x, y), 'black', bitmap)
         self.draw.bitmap((x, y), bitmap)
 
     def getFont(self, font_name):
@@ -77,4 +81,18 @@ class InfoWindow():
 
     def display(self, angle):
         self.image = self.image.rotate(angle)
-        self.epd.display_frame(self.epd.get_frame_buffer(self.image))
+
+        new_image_found = True
+        if os.path.exists(self.tmpImagePath):
+            old_image = Image.open(self.tmpImagePath)
+            diff = ImageChops.difference(self.image, old_image)
+            if not diff.getbbox():
+                new_image_found = False
+
+        if new_image_found:
+            logging.info("New information in the image detected. Updating the screen.")
+            self.image.save(self.tmpImagePath)
+            self.epd.display_frame(self.epd.get_frame_buffer(self.image))
+            self.epd.sleep()
+        else:
+            logging.info("No new information found. Not updating the screen.")

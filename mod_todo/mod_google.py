@@ -17,17 +17,21 @@ class ToDo:
         logging.info("Entering ToDo.list()")
         service = build('tasks', 'v1', credentials=self.creds)
 
-        # Fetch Results
-        results = service.tasks().list(tasklist='YVJWSXk4cXVhZk1aSGlmag').execute()
-
         items = []
 
-        # Loop through results and format them for ingest
-        for task in results['items']:
-            items.append({
-                "content": task['title'],
-                "priority": task['position']
-            })
+        # Fetch Results from all lists where todo is in the name
+        tasklists = service.tasklists().list().execute()
+        for tasklist in tasklists['items']:
+            if "todo" in tasklist['title'].lower():
+                results = service.tasks().list(tasklist=tasklist['id']).execute()
+
+                # Loop through results and format them for ingest
+                if 'items' in results.keys():
+                    for task in results['items']:
+                        items.append({
+                            "content": task['title'],
+                            "priority": task['position']
+                        })
 
         # Return results to main program
         return items
