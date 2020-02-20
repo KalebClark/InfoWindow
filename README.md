@@ -6,7 +6,7 @@ Rapsberry pi powered e-ink display for displaying information in an always on st
 
 The functionality is not meant to be an "end all solution for calendaring and Todo lists" The intent is to provide an *always  on* display to show me what is coming up next. I can then check in browser, phone, etc for details and updates to the data. In your face reminder.
 
-(https://www.element14.com/community/docs/DOC-94108/l/episode-422-raspberry-pi-e-ink-task-organizer?ICID=e14-presents-videos)[See the video and Bill of materials on the Element14 Community]
+[See the video and Bill of materials on the Element14 Community](https://www.element14.com/community/docs/DOC-94108/l/episode-422-raspberry-pi-e-ink-task-organizer?ICID=e14-presents-videos)
 
 <div align="center">
   <a href="#features">Features</a> |
