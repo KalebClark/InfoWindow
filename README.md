@@ -31,6 +31,9 @@ Clone this repo onto your raspberry pi. Does not really matter where it is, but 
 ### Setup python modules
 Run `pip install -r requirements.txt`. This should install all required modules. I stuck to basic standard modules for ease of installation.
 
+#### Google Calendar API
+You will need to install the google python calendar api. This is a little confusing, but if you [click here](https://developers.google.com/calendar/quickstart/python) and follow the install instructions up through "Step 2" you should be on your way!
+
 ## Configuration
 You will need to configure a few things such as API Keys and location. Copy config.json-sample to config.json. Edit config.json to add your api keys and other information. 
 
