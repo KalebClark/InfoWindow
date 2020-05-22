@@ -71,10 +71,10 @@ class InfoWindow:
         num_chars = len(str)
         for char in str:
             (np_x, np_y) = self.getFont(font).getsize(str)
-            if np_x >= 235:
+            if np_x >= 255:
                str = str[:-1]
 
-            if np_x <= 235:
+            if np_x <= 255:
                 return str 
 
         return str

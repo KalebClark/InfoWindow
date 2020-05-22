@@ -6,3 +6,4 @@ icons/*.png
 test.py
 config.json
 infowindow.jpg
+venv/

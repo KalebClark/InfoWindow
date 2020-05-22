@@ -56,13 +56,25 @@ class Cal:
         for event_key in sorted(events.keys()):
             start = events[event_key]['start'].get('dateTime', events[event_key]['start'].get('date'))
 
+            if start == dt.strftime(dt.now(), format='%Y-%m-%d'):
+                today = True
+            else:
+                today = False
+
             # Sunrise and Sunset.
             if self.timeformat == "12h":
-                st_date = dt.strftime(dtparse(start), format='%m-%d-%Y')
+                if today:
+                    st_date = dt.strftime(dtparse(start), format='%m-%d <')
+                else:
+                    st_date = dt.strftime(dtparse(start), format='%m-%d')
                 st_time = dt.strftime(dtparse(start), format='%I:%M%p')
             else:
-                st_date = dt.strftime(dtparse(start), format='%d.%m.%Y')
-                st_time = dt.strftime(dtparse(start), format='%H:%M')
+                if today:
+                    st_date = dt.strftime(dtparse(start), format='%d.%m <')
+                    st_time = dt.strftime(dtparse(start), format='%H:%M <')
+                else:
+                    st_date = dt.strftime(dtparse(start), format='%d.%m')
+                    st_time = dt.strftime(dtparse(start), format='%H:%M')
 
             items.append({
                 "date": st_date,
