@@ -29,9 +29,11 @@ charset = config_data["general"]["charset"]
 todo_opts = config_data["todo"]
 calendar_opts = config_data["calendar"]
 weather_opts = config_data["weather"]
+infowindow_opts = {}
 # give the timeformat to all the modules needing it
 calendar_opts["timeformat"] = config_data["general"]["timeformat"]
 weather_opts["timeformat"] = config_data["general"]["timeformat"]
+infowindow_opts["timeformat"] = config_data["general"]["timeformat"]
 
 # END CONFIGURATION ###########################################################
 ###############################################################################
@@ -69,7 +71,7 @@ def main():
     weather = modWeather.Weather(weather_opts)
 
     # Setup e-ink initial drawings
-    iw = infowindow.InfoWindow()
+    iw = infowindow.InfoWindow(infowindow_opts)
 
     # Weather Grid
     temp_rect_width = 102
@@ -122,14 +124,22 @@ def main():
     c_y = 94
 
     # Time and date divider line
-    (dt_x, dt_y) = iw.getFont('robotoRegular14').getsize('55.55pm')
+    if calendar_opts['timeformat'] == "12h":
+        (dt_x, dt_y) = iw.getFont('robotoRegular14').getsize('55.55pm')
+    else:
+        (dt_x, dt_y) = iw.getFont('robotoRegular14').getsize('55.55')
 
     for cal_item in cal_items:
-        (x, y) = iw.text(3, c_y, cal_item['date'].encode(charset).strip(), 'robotoRegular14', 'black')
+        font_color = 'black'
+        if cal_item['today']:
+            font_color = calendar_opts['today_text_color']
+            iw.rectangle(0, (c_y - 2), 313, (c_y + 30), calendar_opts['today_background_color'])
+
+        (x, y) = iw.text(3, c_y, cal_item['date'].encode(charset).strip(), 'robotoRegular14', font_color)
         iw.line((dt_x + 5), c_y, (dt_x + 5), (c_y + 32), 'black')
-        iw.text(3, (c_y + 15), cal_item['time'].encode(charset).strip(), 'robotoRegular14', 'black')
+        iw.text(3, (c_y + 15), cal_item['time'].encode(charset).strip(), 'robotoRegular14', font_color)
         iw.text((dt_x + 7), (c_y + 5), iw.truncate(cal_item['content'].encode(charset).strip(), 'robotoRegular18'),
-                'robotoRegular18', 'black')
+                'robotoRegular18', font_color)
         c_y = (c_y + 32)
         iw.line(0, (c_y - 2), 313, (c_y - 2), 'black')
         # logging.debug("ITEM: "+str(cal_item['date']), str(cal_item['time']), str(cal_item['content']))

@@ -9,7 +9,9 @@
     },
     "calendar": {
         "additional": ["Contacts"],
-        "ignored": ["Buy ticket!"]
+        "ignored": ["Buy ticket!"],
+        "today_text_color": "red",
+        "today_background_color": "white"
     },
     "weather": {
         "api_key": "1234",

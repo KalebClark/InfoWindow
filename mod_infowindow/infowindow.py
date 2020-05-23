@@ -7,16 +7,23 @@ import os, sys
 import logging
 import tempfile
 
+
 class InfoWindow:
-    def __init__(self):
+    def __init__(self, options):
         self.epd = epd7in5b.EPD()
         self.epd.init()
         self.width = 640
         self.height = 384
         self.image = Image.new('L', (640, 384), 255)
         self.draw = ImageDraw.Draw(self.image)
+        self.fonts = {}
         self.initFonts()
         self.tmpImagePath = os.path.join(tempfile.gettempdir(), "InfoWindow.png")
+        self.timeformat = options['timeformat']
+        if self.timeformat == "12h":
+            self.calendar_text_length = 253
+        else:
+            self.calendar_text_length = 270
 
     def getCWD(self):
         path = os.path.dirname(os.path.realpath(sys.argv[0]))
@@ -35,11 +42,11 @@ class InfoWindow:
         self.draw.line((left_1, top_1, left_2, top_2), fill=fill)
 
     def rectangle(self, tl, tr, bl, br, fill):
-        self.draw.rectangle(((tl, tr), (bl, br)), fill = fill)
+        self.draw.rectangle(((tl, tr), (bl, br)), fill=fill)
     
     def text(self, left, top, text, font, fill):
         font = self.fonts[font]
-        self.draw.text((left, top), text, font = font, fill = fill)
+        self.draw.text((left, top), text, font=font, fill=fill)
         return self.draw.textsize(text, font=font)
 
     def rotate(self, angle):
@@ -67,17 +74,17 @@ class InfoWindow:
             'robotoBlack48': ImageFont.truetype(roboto+"Black.ttf", 48)
         }
 
-    def truncate(self, str, font):
-        num_chars = len(str)
-        for char in str:
-            (np_x, np_y) = self.getFont(font).getsize(str)
-            if np_x >= 255:
-               str = str[:-1]
+    def truncate(self, string, font):
+        num_chars = len(string)
+        for char in string:
+            (np_x, np_y) = self.getFont(font).getsize(string)
+            if np_x >= self.calendar_text_length:
+                string = string[:-1]
 
-            if np_x <= 255:
-                return str 
+            if np_x <= self.calendar_text_length:
+                return string
 
-        return str
+        return string
 
     def display(self, angle):
         self.image = self.image.rotate(angle)
