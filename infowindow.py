@@ -34,6 +34,7 @@ infowindow_opts = {}
 calendar_opts["timeformat"] = config_data["general"]["timeformat"]
 weather_opts["timeformat"] = config_data["general"]["timeformat"]
 infowindow_opts["timeformat"] = config_data["general"]["timeformat"]
+infowindow_opts["cell_spacing"] = config_data["general"]["cell_spacing"]
 
 # END CONFIGURATION ###########################################################
 ###############################################################################
@@ -109,11 +110,19 @@ def main():
     todo_items = todo.list()
     logging.debug("Todo Items")
     logging.debug("-----------------------------------------------------------------------")
-    t_y = 94
+
+    tasks_font = "robotoRegular18"
+    (t_x, t_y) = iw.getFont(tasks_font).getsize('JgGj')
+    line_height = t_y + (2 * infowindow_opts["cell_spacing"])
+
+    current_task_y = 92
     for todo_item in todo_items:
-        iw.text(333, t_y, todo_item['content'].encode(charset).strip(), 'robotoRegular18', 'black')
-        t_y = (t_y + 24)
-        iw.line(325, (t_y - 2), 640, (t_y - 2), 'black')
+        iw.text(333, (current_task_y + infowindow_opts["cell_spacing"]), todo_item['content'].encode(charset).strip(),
+                tasks_font, 'black')
+        iw.line(327, (current_task_y + line_height + 1), 640, (current_task_y + line_height + 1), 'black')
+
+        # set next loop height
+        current_task_y = (current_task_y + line_height + 2)
         logging.debug("ITEM: %s" % todo_item['content'].encode(charset).strip())
 
     # DISPLAY CALENDAR INFO
@@ -121,27 +130,56 @@ def main():
     cal_items = cal.list()
     logging.debug("Calendar Items")
     logging.debug("-----------------------------------------------------------------------")
-    c_y = 94
 
-    # Time and date divider line
+    calendar_date_font = "robotoRegular14"
+    calendar_entry_font = "robotoRegular18"
+
+    # todo: device mechanism to detect max text width/height programmatically (looping over all chars possible)
     if calendar_opts['timeformat'] == "12h":
-        (dt_x, dt_y) = iw.getFont('robotoRegular14').getsize('55.55pm')
+        (dt_x, dt_y) = iw.getFont(calendar_date_font).getsize('55.55pm')
     else:
-        (dt_x, dt_y) = iw.getFont('robotoRegular14').getsize('55.55')
+        (dt_x, dt_y) = iw.getFont(calendar_date_font).getsize('55.55')
 
+    (it_x, it_y) = iw.getFont(calendar_entry_font).getsize('JgGj')
+
+    line_height = (2 * dt_y) + (2 * infowindow_opts["cell_spacing"])
+
+    current_calendar_y = 92
     for cal_item in cal_items:
         font_color = 'black'
         if cal_item['today']:
             font_color = calendar_opts['today_text_color']
-            iw.rectangle(0, (c_y - 2), 313, (c_y + 30), calendar_opts['today_background_color'])
+            iw.rectangle(0, current_calendar_y,
+                         313, (current_calendar_y + line_height),
+                         calendar_opts['today_background_color'])
 
-        (x, y) = iw.text(3, c_y, cal_item['date'].encode(charset).strip(), 'robotoRegular14', font_color)
-        iw.line((dt_x + 5), c_y, (dt_x + 5), (c_y + 32), 'black')
-        iw.text(3, (c_y + 15), cal_item['time'].encode(charset).strip(), 'robotoRegular14', font_color)
-        iw.text((dt_x + 7), (c_y + 5), iw.truncate(cal_item['content'].encode(charset).strip(), 'robotoRegular18'),
-                'robotoRegular18', font_color)
-        c_y = (c_y + 32)
-        iw.line(0, (c_y - 2), 313, (c_y - 2), 'black')
+        # draw horizontal line
+        iw.line(0, (current_calendar_y + line_height + 1),
+                313, (current_calendar_y + line_height + 1),
+                'black')
+        # draw vertical line
+        iw.line((dt_x + (2 * infowindow_opts["cell_spacing"]) + 1), current_calendar_y,
+                (dt_x + (2 * infowindow_opts["cell_spacing"]) + 1), (current_calendar_y + line_height),
+                'black')
+
+        # draw event date
+        iw.text((infowindow_opts["cell_spacing"]),
+                (current_calendar_y + infowindow_opts["cell_spacing"]),
+                cal_item['date'].encode(charset).strip(), calendar_date_font, font_color)
+        # draw event time
+        iw.text((infowindow_opts["cell_spacing"]),
+                (current_calendar_y + ((line_height - 2 * infowindow_opts["cell_spacing"]) / 2)),
+                cal_item['time'].encode(charset).strip(), calendar_date_font, font_color)
+        # draw event text
+        calendar_event_text_start = dt_x + (3 * infowindow_opts["cell_spacing"]) + 1
+        max_event_text_length = 313 - calendar_event_text_start - infowindow_opts["cell_spacing"]
+        iw.text(calendar_event_text_start,
+                (current_calendar_y + ((line_height - it_y) / 2)),
+                iw.truncate(cal_item['content'].encode(charset).strip(), calendar_entry_font, max_event_text_length),
+                calendar_entry_font, font_color)
+
+        # set new line height for next round
+        current_calendar_y = (current_calendar_y + line_height + 2)
         # logging.debug("ITEM: "+str(cal_item['date']), str(cal_item['time']), str(cal_item['content']))
         logging.debug("ITEM: %s" % cal_item['content'].encode(charset).strip())
 
@@ -174,7 +212,7 @@ def main():
     t_desc_posx = (temp_left + t_x) - 15
     iw.text(t_desc_posx, 25, u_temp, 'robotoBlack18', 'white')
 
-    # Wind 
+    # Wind
     iw.text(405, 5, weather['wind']['dir'], 'robotoBlack18', 'black')
     iw.text(380, 35, str(weather['wind']['speed']) + u_speed, 'robotoRegular18', 'black')
 

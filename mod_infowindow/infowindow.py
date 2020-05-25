@@ -20,14 +20,10 @@ class InfoWindow:
         self.initFonts()
         self.tmpImagePath = os.path.join(tempfile.gettempdir(), "InfoWindow.png")
         self.timeformat = options['timeformat']
-        if self.timeformat == "12h":
-            self.calendar_text_length = 253
-        else:
-            self.calendar_text_length = 270
 
     def getCWD(self):
         path = os.path.dirname(os.path.realpath(sys.argv[0]))
-        return path    
+        return path
 
     def getImage(self):
         return self.image
@@ -43,7 +39,7 @@ class InfoWindow:
 
     def rectangle(self, tl, tr, bl, br, fill):
         self.draw.rectangle(((tl, tr), (bl, br)), fill=fill)
-    
+
     def text(self, left, top, text, font, fill):
         font = self.fonts[font]
         self.draw.text((left, top), text, font=font, fill=fill)
@@ -74,14 +70,14 @@ class InfoWindow:
             'robotoBlack48': ImageFont.truetype(roboto+"Black.ttf", 48)
         }
 
-    def truncate(self, string, font):
+    def truncate(self, string, font, max_size):
         num_chars = len(string)
         for char in string:
             (np_x, np_y) = self.getFont(font).getsize(string)
-            if np_x >= self.calendar_text_length:
+            if np_x >= max_size:
                 string = string[:-1]
 
-            if np_x <= self.calendar_text_length:
+            if np_x <= max_size:
                 return string
 
         return string
