@@ -4,6 +4,7 @@ import sys
 import os.path
 import json
 import logging
+import string
 from mod_infowindow import infowindow
 
 # Select pluggable module for todo list, calendar and weather.
@@ -64,6 +65,19 @@ def HandleException(et, val, tb):
 sys.excepthook = HandleException
 
 
+# helper to calculate max char width and height
+def get_max_char_size(iw, chars, font):
+    max_x = 0
+    max_y = 0
+    for char in chars:
+        (x, y) = iw.getFont(font).getsize(char)
+        if x > max_x:
+            max_x = x
+        if y > max_y:
+            max_y = y
+    return max_x, max_y
+
+
 # Main Program ################################################################
 def main():
     # Instantiate API modules
@@ -73,6 +87,11 @@ def main():
 
     # Setup e-ink initial drawings
     iw = infowindow.InfoWindow(infowindow_opts)
+
+    # Set some things
+    calendar_date_font = "robotoRegular14"
+    calendar_entry_font = "robotoRegular18"
+    tasks_font = "robotoRegular18"
 
     # Weather Grid
     temp_rect_width = 102
@@ -111,8 +130,8 @@ def main():
     logging.debug("Todo Items")
     logging.debug("-----------------------------------------------------------------------")
 
-    tasks_font = "robotoRegular18"
-    (t_x, t_y) = iw.getFont(tasks_font).getsize('JgGj')
+    #(t_x, t_y) = iw.getFont(tasks_font).getsize('JgGj')
+    (t_x, t_y) = get_max_char_size(iw, string.printable, tasks_font)
     line_height = t_y + (2 * infowindow_opts["cell_spacing"])
 
     current_task_y = 92
@@ -131,16 +150,19 @@ def main():
     logging.debug("Calendar Items")
     logging.debug("-----------------------------------------------------------------------")
 
-    calendar_date_font = "robotoRegular14"
-    calendar_entry_font = "robotoRegular18"
-
-    # todo: device mechanism to detect max text width/height programmatically (looping over all chars possible)
     if calendar_opts['timeformat'] == "12h":
-        (dt_x, dt_y) = iw.getFont(calendar_date_font).getsize('55.55pm')
-    else:
-        (dt_x, dt_y) = iw.getFont(calendar_date_font).getsize('55.55')
+        (t_x, t_y) = get_max_char_size(iw, string.digits, calendar_date_font)
+        (dt_x, dt_y) = iw.getFont(calendar_date_font).getsize(': pm')
+        dt_x = dt_x + (4 * t_x)
+        if t_y > dt_y:
+            dt_y = t_y
 
-    (it_x, it_y) = iw.getFont(calendar_entry_font).getsize('JgGj')
+    else:
+        (t_x, t_y) = get_max_char_size(iw, string.digits, calendar_date_font)
+        (dt_x, dt_y) = iw.getFont(calendar_date_font).getsize('.')
+        dt_x = dt_x + (4 * t_x)
+
+    (it_x, it_y) = get_max_char_size(iw, string.printable, calendar_entry_font)
 
     line_height = (2 * dt_y) + (2 * infowindow_opts["cell_spacing"])
 
