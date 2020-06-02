@@ -46,9 +46,13 @@ class Cal:
             for event in result.get('items', []):
                 if event['summary'] in self.ignored:
                     continue
-                start = event['start'].get('dateTime', event['start'].get('date'))
-                if start in events.keys():
-                    start = "%sa" % start
+                initial_start = event['start'].get('dateTime', event['start'].get('date'))
+                start = "%s-0" % initial_start
+                counter = 0
+                while start in events.keys():
+                    counter += 1
+                    start = "%s-%s" % (initial_start, counter)
+
                 events[start] = event
 
         # 2019-11-05T10:00:00-08:00
