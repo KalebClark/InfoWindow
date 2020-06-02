@@ -59,7 +59,7 @@ class Cal:
 
         for event_key in sorted(events.keys()):
             start = events[event_key]['start'].get('dateTime', events[event_key]['start'].get('date'))
-            if dt.strftime(dtparse(start), format='%Y%m%d') == dt.strftime(dt.today(), format='%Y%m%d'):
+            if int(dt.strftime(dtparse(start), format='%Y%m%d')) <= int(dt.strftime(dt.today(), format='%Y%m%d')):
                 today = True
             else:
                 today = False
