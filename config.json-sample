@@ -9,7 +9,7 @@
         "api_key": "1234"
     },
     "calendar": {
-        "additional": ["Contacts"],
+        "additional": ["Contacts", "Birthdays"],
         "ignored": ["Buy ticket!"],
         "today_text_color": "red",
         "today_background_color": "white"
