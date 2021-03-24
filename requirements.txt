@@ -72,7 +72,7 @@ requests==2.22.0
 requests-oauthlib==1.2.0
 responses==0.9.0
 RPi.GPIO==0.7.0
-rsa==4.0
+rsa==4.1
 RTIMULib==7.2.1
 scrollphat==0.0.7
 scrollphathd==1.2.1
