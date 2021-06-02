@@ -88,5 +88,5 @@ touchphat==0.0.1
 twython==3.7.0
 unicornhathd==0.0.4
 uritemplate==3.0.0
-urllib3==1.25.6
+urllib3==1.26.5
 Werkzeug==0.14.1
