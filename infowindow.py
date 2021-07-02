@@ -136,8 +136,13 @@ def main():
 
     current_task_y = 92
     for todo_item in todo_items:
+        color = 'black'
+        if 'today' in todo_item.keys():
+            if todo_item['today']:
+                color = 'red'
+
         iw.text(333, (current_task_y + infowindow_opts["cell_spacing"]), todo_item['content'].encode(charset).strip(),
-                tasks_font, 'black')
+                tasks_font, color)
         iw.line(327, (current_task_y + line_height + 1), 640, (current_task_y + line_height + 1), 'black')
 
         # set next loop height

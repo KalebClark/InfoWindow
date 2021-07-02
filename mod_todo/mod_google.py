@@ -1,6 +1,9 @@
 from mod_utils import mod_google_auth
 from googleapiclient.discovery import build
+from datetime import datetime
 import logging
+
+now = datetime.now()
 
 logger = logging.getLogger(__name__)
 
@@ -28,9 +31,16 @@ class ToDo:
                 # Loop through results and format them for ingest
                 if 'items' in results.keys():
                     for task in results['items']:
+
+                        today = False
+                        if 'due' in task.keys():
+                            if task['due'].startswith(now.strftime("%Y-%m-%d")):
+                                today = True
+
                         items.append({
                             "content": task['title'],
-                            "priority": task['position']
+                            "priority": task['position'],
+                            "today": today
                         })
 
         # Return results to main program
