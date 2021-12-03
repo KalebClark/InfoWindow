@@ -29,11 +29,11 @@ class ToDo:
                 results = service.tasks().list(tasklist=tasklist['id']).execute()
 
                 # Loop through results and format them for ingest
-                if 'items' in results.keys():
+                if 'items' in list(results.keys()):
                     for task in results['items']:
 
                         today = False
-                        if 'due' in task.keys():
+                        if 'due' in list(task.keys()):
                             if task['due'].startswith(now.strftime("%Y-%m-%d")):
                                 today = True
 

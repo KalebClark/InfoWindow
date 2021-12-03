@@ -1,4 +1,4 @@
-import urllib2, base64
+import urllib.request, urllib.error, urllib.parse, base64
 import json
 import logging
 
@@ -11,10 +11,10 @@ class ToDo:
     
     def list(self):
         action = "tasks.json?sort=priority"
-        request = urllib2.Request("https://{0}/{1}".format(self.company, action))
+        request = urllib.request.Request("https://{0}/{1}".format(self.company, action))
         request.add_header("Authorization", "BASIC " + base64.b64encode(self.key + ":xxx"))
 
-        response = urllib2.urlopen(request)
+        response = urllib.request.urlopen(request)
         data = json.loads(response.read())
         items = []
 

@@ -28,7 +28,7 @@ class Cal:
         while True:
             calendar_list = service.calendarList().list(pageToken=page_token).execute()
             for calendar_list_entry in calendar_list['items']:
-                if "primary" in calendar_list_entry.keys():
+                if "primary" in list(calendar_list_entry.keys()):
                     if calendar_list_entry['primary']:
                         calendar_ids.append(calendar_list_entry['id'])
                 elif calendar_list_entry['summary'] in self.additional:
@@ -49,7 +49,7 @@ class Cal:
                 initial_start = event['start'].get('dateTime', event['start'].get('date'))
                 start = "%s-0" % initial_start
                 counter = 0
-                while start in events.keys():
+                while start in list(events.keys()):
                     counter += 1
                     start = "%s-%s" % (initial_start, counter)
 

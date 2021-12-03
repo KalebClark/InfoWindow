@@ -1,9 +1,10 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 
 import logging
 import os
-from driver import epd7in5b
 from PIL import Image
+
+from driver import epd7in5b
 
 # Setup Logging -  change to logging.DEBUG if you are having issues.
 logging.basicConfig(level=logging.INFO)

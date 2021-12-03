@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 
 import sys
 import os.path
@@ -26,7 +26,6 @@ with open(config_path) as config_file:
 
 # Rotation. 0 for desktop, 180 for hanging upside down
 rotation = config_data["general"]["rotation"]
-charset = config_data["general"]["charset"]
 todo_opts = config_data["todo"]
 calendar_opts = config_data["calendar"]
 weather_opts = config_data["weather"]
@@ -51,13 +50,13 @@ logging.info("Configuration Complete")
 def HandleException(et, val, tb):
     iw = infowindow.InfoWindow()
     iw.text(0, 10, "EXCEPTION IN PROGRAM", 'robotoBlack18', 'black')
-    iw.text(0, 30, val.encode(charset).strip(), 'robotoBlack18', 'black')
+    iw.text(0, 30, val.strip(), 'robotoBlack18', 'black')
     iw.text(0, 60, "Please run program from command line interactivly to resolve", 'robotoBlack18', 'black')
     print("EXCEPTION IN PROGRAM ==================================")
-    print("error message: %s" % val)
-    print("type:          %s" % et)
-    print("traceback:     %s" % tb)
-    print("line:          %s" % tb.lineno)
+    print(("error message: %s" % val))
+    print(("type:          %s" % et))
+    print(("traceback:     %s" % tb))
+    print(("line:          %s" % tb.lineno))
     print("END EXCEPTION =========================================")
     iw.display(rotation)
 
@@ -137,17 +136,17 @@ def main():
     current_task_y = 92
     for todo_item in todo_items:
         color = 'black'
-        if 'today' in todo_item.keys():
+        if 'today' in list(todo_item.keys()):
             if todo_item['today']:
                 color = 'red'
 
-        iw.text(333, (current_task_y + infowindow_opts["cell_spacing"]), todo_item['content'].encode(charset).strip(),
+        iw.text(333, (current_task_y + infowindow_opts["cell_spacing"]), todo_item['content'].strip(),
                 tasks_font, color)
         iw.line(327, (current_task_y + line_height + 1), 640, (current_task_y + line_height + 1), 'black')
 
         # set next loop height
         current_task_y = (current_task_y + line_height + 2)
-        logging.debug("ITEM: %s" % todo_item['content'].encode(charset).strip())
+        logging.debug("ITEM: %s" % todo_item['content'].strip())
 
     # DISPLAY CALENDAR INFO
     # =========================================================================
@@ -192,23 +191,23 @@ def main():
         # draw event date
         iw.text((infowindow_opts["cell_spacing"]),
                 (current_calendar_y + infowindow_opts["cell_spacing"]),
-                cal_item['date'].encode(charset).strip(), calendar_date_font, font_color)
+                cal_item['date'].strip(), calendar_date_font, font_color)
         # draw event time
         iw.text((infowindow_opts["cell_spacing"]),
                 (current_calendar_y + ((line_height - 2 * infowindow_opts["cell_spacing"]) / 2)),
-                cal_item['time'].encode(charset).strip(), calendar_date_font, font_color)
+                cal_item['time'].strip(), calendar_date_font, font_color)
         # draw event text
         calendar_event_text_start = dt_x + (3 * infowindow_opts["cell_spacing"]) + 1
         max_event_text_length = 313 - calendar_event_text_start - infowindow_opts["cell_spacing"]
         iw.text(calendar_event_text_start,
                 (current_calendar_y + ((line_height - it_y) / 2)),
-                iw.truncate(cal_item['content'].encode(charset).strip(), calendar_entry_font, max_event_text_length),
+                iw.truncate(cal_item['content'].strip(), calendar_entry_font, max_event_text_length),
                 calendar_entry_font, font_color)
 
         # set new line height for next round
         current_calendar_y = (current_calendar_y + line_height + 2)
         # logging.debug("ITEM: "+str(cal_item['date']), str(cal_item['time']), str(cal_item['content']))
-        logging.debug("ITEM: %s" % cal_item['content'].encode(charset).strip())
+        logging.debug("ITEM: %s" % cal_item['content'].strip())
 
     # DISPLAY WEATHER INFO
     # =========================================================================
@@ -217,18 +216,18 @@ def main():
     logging.debug("-----------------------------------------------------------------------")
     # Set unit descriptors
     if weather_opts['units'] == 'imperial':
-        u_speed = u"mph"
-        u_temp = u"F"
+        u_speed = "mph"
+        u_temp = "F"
     elif weather_opts['units'] == 'metric':
-        u_speed = u"m/sec"
-        u_temp = u"C"
+        u_speed = "m/sec"
+        u_temp = "C"
     else:
-        u_speed = u"m/sec"
-        u_temp = u"K"
+        u_speed = "m/sec"
+        u_temp = "K"
 
-    deg_symbol = u"\u00b0"
+    deg_symbol = "°"
     iw.bitmap(2, 2, weather['icon'])
-    iw.text(70, 2, weather['description'].title().encode(charset).strip(), 'robotoBlack24', 'black')
+    iw.text(70, 2, weather['description'].title().strip(), 'robotoBlack24', 'black')
     iw.text(70, 35, weather['sunrise'], 'robotoRegular18', 'black')
     iw.text(154, 35, weather['sunset'], 'robotoRegular18', 'black')
 

@@ -2,7 +2,6 @@
     "general": {
         "rotation": 180,
         "timeformat": "12h",
-        "charset": "latin1",
         "cell_spacing": 2
     },
     "todo": {

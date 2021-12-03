@@ -16,6 +16,6 @@ def getCWD():
 def HandleError(msg):
     print("ERROR IN PROGRAM ======================================")
     print("Program requires user input. Please run from console")
-    print("ERR: " + msg)
+    print(("ERR: " + msg))
     print("END ERROR =============================================")
     quit()
