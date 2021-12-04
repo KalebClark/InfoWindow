@@ -1,9 +1,10 @@
 from mod_utils import mod_google_auth
 from googleapiclient.discovery import build
-from datetime import datetime
+from datetime import timedelta, date
 import logging
 
-now = datetime.now()
+today = date.today()
+tomorrow = date.today() + timedelta(days=1)
 
 logger = logging.getLogger(__name__)
 
@@ -32,15 +33,20 @@ class ToDo:
                 if 'items' in list(results.keys()):
                     for task in results['items']:
 
-                        today = False
+                        is_today = False
                         if 'due' in list(task.keys()):
-                            if task['due'].startswith(now.strftime("%Y-%m-%d")):
-                                today = True
+                            if task['due'].startswith(today.strftime("%Y-%m-%d")):
+                                is_today = True
+                            elif task['due'].startswith(tomorrow.strftime("%Y-%m-%d")):
+                                pass
+                            else:
+                                # if this task is 3 days or more in the future, don't show it
+                                continue
 
                         items.append({
                             "content": task['title'],
                             "priority": task['position'],
-                            "today": today
+                            "today": is_today
                         })
 
         # Return results to main program
