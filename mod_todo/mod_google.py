@@ -1,6 +1,6 @@
 from mod_utils import mod_google_auth
 from googleapiclient.discovery import build
-from datetime import timedelta, date
+from datetime import datetime, timedelta, date
 import logging
 
 today = date.today()
@@ -21,7 +21,9 @@ class ToDo:
         logging.info("Entering ToDo.list()")
         service = build('tasks', 'v1', credentials=self.creds)
 
-        items = []
+        tasks_with_due = []
+        items_with_due = []
+        items_without_due = []
 
         # Fetch Results from all lists where todo is in the name
         tasklists = service.tasklists().list().execute()
@@ -29,25 +31,35 @@ class ToDo:
             if "todo" in tasklist['title'].lower():
                 results = service.tasks().list(tasklist=tasklist['id']).execute()
 
-                # Loop through results and format them for ingest
                 if 'items' in list(results.keys()):
                     for task in results['items']:
-
-                        is_today = False
                         if 'due' in list(task.keys()):
-                            if task['due'].startswith(today.strftime("%Y-%m-%d")):
-                                is_today = True
-                            elif task['due'].startswith(tomorrow.strftime("%Y-%m-%d")):
-                                pass
-                            else:
-                                # if this task is 3 days or more in the future, don't show it
-                                continue
+                            tasks_with_due.append(task)
+                        else:
+                            items_without_due.append({
+                                "content": task['title'],
+                                "priority": task['position'],
+                                "today": False
+                            })
 
-                        items.append({
-                            "content": task['title'],
-                            "priority": task['position'],
-                            "today": is_today
-                        })
+        for task in sorted(tasks_with_due, key=lambda x: x['due']):
+            is_today = False
+            due = datetime.fromisoformat(task['due'].replace("Z", "+00:00")).date()
+            if due < today:
+                is_today = True
+                task['title'] = "Overdue: %s" % task['title']
+            elif due == today:
+                is_today = True
+            elif due == tomorrow:
+                pass
+            else:
+                continue
+
+            items_with_due.append({
+                "content": task['title'],
+                "priority": task['position'],
+                "today": is_today
+            })
 
         # Return results to main program
-        return items
+        return items_with_due + items_without_due
