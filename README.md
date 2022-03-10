@@ -72,6 +72,13 @@ Todoist is the current active module in this code. It only requires `api_key`. T
 using google tasks, leave this as null `todo: null`
 * api_key: Enter your todoist API key.
 
+There is a bug in the Google API which will prevent to show repeated Tasks once one is marked as completed. See (and
+upvote): 
+* https://support.google.com/calendar/thread/3706294
+* https://support.google.com/calendar/thread/4113489
+* https://support.google.com/calendar/thread/111623199
+* https://support.google.com/calendar/thread/113398139
+
 ### Weather (Module)
 Open Weather Map is where the data is coming from in the default module. This requires a few keys.
 * api_key: Get your api key from OWM website.
