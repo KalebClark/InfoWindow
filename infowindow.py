@@ -44,26 +44,6 @@ logging.basicConfig(level=logging.DEBUG)
 logging.info("Configuration Complete")
 
 
-# Custom exception handler. Need to handle exceptions and send them to the
-# display since this will run headless most of the time. This gives the user
-# enough info to know that they need to troubleshoot.
-def HandleException(et, val, tb):
-    iw = infowindow.InfoWindow()
-    iw.text(0, 10, "EXCEPTION IN PROGRAM", 'robotoBlack18', 'black')
-    iw.text(0, 30, val.strip(), 'robotoBlack18', 'black')
-    iw.text(0, 60, "Please run program from command line interactivly to resolve", 'robotoBlack18', 'black')
-    print("EXCEPTION IN PROGRAM ==================================")
-    print(("error message: %s" % val))
-    print(("type:          %s" % et))
-    print(("traceback:     %s" % tb))
-    print(("line:          %s" % tb.lineno))
-    print("END EXCEPTION =========================================")
-    iw.display(rotation)
-
-
-sys.excepthook = HandleException
-
-
 # helper to calculate max char width and height
 def get_max_char_size(iw, chars, font):
     max_x = 0
@@ -89,47 +69,38 @@ def main():
 
     # Set some things
     calendar_date_font = "robotoRegular14"
-    calendar_entry_font = "robotoRegular18"
-    tasks_font = "robotoRegular18"
+    calendar_entry_font = "robotoRegular22"
+    tasks_font = "robotoRegular22"
 
     # Weather Grid
-    temp_rect_width = 102
+    temp_rect_width = 128
     temp_rect_left = (iw.width / 2) - (temp_rect_width / 2)
     temp_rect_right = (iw.width / 2) + (temp_rect_width / 2)
 
-    iw.line(268, 0, 268, 64, 'black')  # First Vertical Line
+    iw.line(335, 0, 335, 64, 'black')  # First Vertical Line
     iw.rectangle(temp_rect_left, 0, temp_rect_right, 64, 'red')
-    iw.line(372, 0, 372, 64, 'black')  # Second Vertical Line
+    iw.line(465, 0, 465, 64, 'black')  # Second Vertical Line
 
-    iw.bitmap(375, 0, "windSmall.bmp")  # Wind Icon
-    iw.line(461, 0, 461, 64, 'black')  # Third Vertical Line
+    # Center cal
+    iw.line(392, 90, 392, 480, 'black')  # Left Black line
+    iw.rectangle(393, 64, 406, 480, 'red')  # Red Rectangle
+    iw.line(407, 90, 407, 480, 'black')  # Right Black line
 
-    iw.bitmap(464, 0, "rainSmall.bmp")  # Rain Icon
-    iw.line(550, 0, 550, 64, 'black')  # Fourth Vertical Line
+    # Calendar
+    iw.line(0, 64, 800, 64, 'black')  # Top Line
+    iw.rectangle(0, 65, 800, 90, 'red')  # Red Rectangle
+    iw.line(0, 91, 800, 91, 'black')  # Bottom Black Line
 
-    iw.bitmap(554, 0, "snowSmall.bmp")  # Snow Icon
+    # Weather Titles
+    iw.text(550, 64, "TODO", 'robotoBlack24', 'white')
+    iw.text(118, 64, "CALENDAR", 'robotoBlack24', 'white')
 
-    # Center cal/todo divider line
-    iw.line(314, 90, 314, 384, 'black')  # Left Black line
-    iw.rectangle(315, 64, 325, 384, 'red')  # Red Rectangle
-    iw.line(326, 90, 326, 384, 'black')  # Right Black line
-
-    # Calendar / Todo Title Line
-    iw.line(0, 64, 640, 64, 'black')  # Top Line
-    iw.rectangle(0, 65, 640, 90, 'red')  # Red Rectangle
-    iw.line(0, 91, 640, 91, 'black')  # Bottom Black Line
-
-    # Todo / Weather Titles
-    iw.text(440, 64, "TODO", 'robotoBlack24', 'white')
-    iw.text(95, 64, "CALENDAR", 'robotoBlack24', 'white')
-
-    # DISPLAY TODO INFO
+    # DISPLAY TO DO INFO
     # =========================================================================
     todo_items = todo.list()
     logging.debug("Todo Items")
     logging.debug("-----------------------------------------------------------------------")
 
-    #(t_x, t_y) = iw.getFont(tasks_font).getsize('JgGj')
     (t_x, t_y) = get_max_char_size(iw, string.printable, tasks_font)
     line_height = t_y + (2 * infowindow_opts["cell_spacing"])
 
@@ -140,9 +111,9 @@ def main():
             if todo_item['today']:
                 color = 'red'
 
-        iw.text(333, (current_task_y + infowindow_opts["cell_spacing"]), todo_item['content'].strip(),
+        iw.text(416, (current_task_y + infowindow_opts["cell_spacing"]), todo_item['content'].strip(),
                 tasks_font, color)
-        iw.line(327, (current_task_y + line_height + 1), 640, (current_task_y + line_height + 1), 'black')
+        iw.line(408, (current_task_y + line_height + 1), 800, (current_task_y + line_height + 1), 'black')
 
         # set next loop height
         current_task_y = (current_task_y + line_height + 2)
@@ -176,12 +147,12 @@ def main():
         if cal_item['today']:
             font_color = calendar_opts['today_text_color']
             iw.rectangle(0, current_calendar_y,
-                         313, (current_calendar_y + line_height),
+                         391, (current_calendar_y + line_height),
                          calendar_opts['today_background_color'])
 
         # draw horizontal line
         iw.line(0, (current_calendar_y + line_height + 1),
-                313, (current_calendar_y + line_height + 1),
+                391, (current_calendar_y + line_height + 1),
                 'black')
         # draw vertical line
         iw.line((dt_x + (2 * infowindow_opts["cell_spacing"]) + 1), current_calendar_y,
@@ -198,7 +169,7 @@ def main():
                 cal_item['time'].strip(), calendar_date_font, font_color)
         # draw event text
         calendar_event_text_start = dt_x + (3 * infowindow_opts["cell_spacing"]) + 1
-        max_event_text_length = 313 - calendar_event_text_start - infowindow_opts["cell_spacing"]
+        max_event_text_length = 391 - calendar_event_text_start - infowindow_opts["cell_spacing"]
         iw.text(calendar_event_text_start,
                 (current_calendar_y + ((line_height - it_y) / 2)),
                 iw.truncate(cal_item['content'].strip(), calendar_entry_font, max_event_text_length),
@@ -225,30 +196,37 @@ def main():
         u_speed = "m/sec"
         u_temp = "K"
 
+    # Weather left box
     deg_symbol = "°"
     iw.bitmap(2, 2, weather['icon'])
-    iw.text(70, 2, weather['description'].title().strip(), 'robotoBlack24', 'black')
-    iw.text(70, 35, weather['sunrise'], 'robotoRegular18', 'black')
-    iw.text(154, 35, weather['sunset'], 'robotoRegular18', 'black')
+    iw.text(90, 2, weather['description'].title().strip(), 'robotoBlack24', 'black')
+    iw.text(90, 35, weather['sunrise'], 'robotoRegular18', 'black')
+    iw.text(192, 35, weather['sunset'], 'robotoRegular18', 'black')
 
     # Temp ( adjust for str length )
-    (t_x, t_y) = iw.getFont('robotoBlack48').getsize(str(weather['temp_cur']) + deg_symbol)
+    temp_string = str(weather['temp_cur']) + deg_symbol
+    (t_x, t_y) = iw.getFont('robotoBlack54').getsize(temp_string)
     temp_left = (iw.width / 2) - (t_x / 2)
-    iw.text(temp_left, 2, str(weather['temp_cur']) + deg_symbol, 'robotoBlack48', 'white')
-    t_desc_posx = (temp_left + t_x) - 15
-    iw.text(t_desc_posx, 25, u_temp, 'robotoBlack18', 'white')
+    iw.text(temp_left, 2, temp_string, 'robotoBlack54', 'white')
+    t_desc_posx = (temp_left + t_x) - 18
+    iw.text(t_desc_posx, 28, u_temp, 'robotoBlack24', 'white')
 
     # Wind
-    iw.text(405, 5, weather['wind']['dir'], 'robotoBlack18', 'black')
-    iw.text(380, 35, str(weather['wind']['speed']) + u_speed, 'robotoRegular18', 'black')
+    iw.bitmap(480, 0, "windSmall.bmp")  # Wind Icon
+    iw.text(520, 5, weather['wind']['dir'], 'robotoBlack18', 'black')
+    iw.text(480, 35, str(weather['wind']['speed']) + u_speed, 'robotoRegular18', 'black')
+    iw.line(576, 0, 576, 64, 'black')  # Third Vertical Line
 
     # Rain
-    iw.text(481, 29, "1hr: " + str(weather['rain']['1h']), 'robotoRegular18', 'black')
-    iw.text(481, 44, "3hr: " + str(weather['rain']['3h']), 'robotoRegular18', 'black')
+    iw.bitmap(616, 0, "rainSmall.bmp")  # Rain Icon
+    iw.text(601, 29, "1hr: " + str(weather['rain']['1h']), 'robotoRegular18', 'black')
+    iw.text(601, 44, "3hr: " + str(weather['rain']['3h']), 'robotoRegular18', 'black')
+    iw.line(687, 0, 687, 64, 'black')  # Fourth Vertical Line
 
     # Snow
-    iw.text(573, 29, "1hr: " + str(weather['snow']['1h']), 'robotoRegular18', 'black')
-    iw.text(573, 44, "3hr: " + str(weather['snow']['3h']), 'robotoRegular18', 'black')
+    iw.bitmap(728, 0, "snowSmall.bmp")  # Snow Icon
+    iw.text(716, 29, "1hr: " + str(weather['snow']['1h']), 'robotoRegular18', 'black')
+    iw.text(716, 44, "3hr: " + str(weather['snow']['3h']), 'robotoRegular18', 'black')
 
     # Write to screen
     # =========================================================================

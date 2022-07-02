@@ -1,4 +1,4 @@
-from driver import epd7in5b
+from driver import epd7in5b_V2
 from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
@@ -8,13 +8,39 @@ import logging
 import tempfile
 
 
+def display_frame(epd, image_data):
+    rgb_image = image_data.convert('RGB')
+    width, height = image_data.size
+    no_red = Image.new('RGB', (width, height), (255, 255, 255))
+    only_red = Image.new('RGB', (width, height), (255, 255, 255))
+
+    for col in range(width):
+        for row in range(height):
+
+            r, g, b = rgb_image.getpixel((col, row))
+            if r == 255 and g == 255 and b == 255:
+                no_red.putpixel((col, row), (255, 255, 255))
+            elif r == 0 and g == 0 and b == 0:
+                no_red.putpixel((col, row), (0, 0, 0))
+            else:
+                no_red.putpixel((col, row), (0, g, b))
+
+            if r == 255 and g == 0 and b == 0:
+                only_red.putpixel((col, row), (0, 0, 0))
+            else:
+                only_red.putpixel((col, row), (255, 255, 255))
+
+    epd.display(epd.getbuffer(no_red), epd.getbuffer(only_red))
+    epd.sleep()
+
+
 class InfoWindow:
     def __init__(self, options):
-        self.epd = epd7in5b.EPD()
+        self.epd = epd7in5b_V2.EPD()
         self.epd.init()
-        self.width = 640
-        self.height = 384
-        self.image = Image.new('L', (640, 384), 255)
+        self.width = 800
+        self.height = 480
+        self.image = Image.new(mode="RGB", size=(800, 480), color=(255, 255, 255))
         self.draw = ImageDraw.Draw(self.image)
         self.fonts = {}
         self.initFonts()
@@ -54,7 +80,7 @@ class InfoWindow:
     def bitmap(self, x, y, image_path):
         bitmap = Image.open(self.getCWD()+"/icons/"+image_path)
         # self.image.paste((0, 0), (x, y), 'black', bitmap)
-        self.draw.bitmap((x, y), bitmap)
+        self.draw.bitmap((x, y), bitmap, fill=(0, 0, 0))
 
     def getFont(self, font_name):
         return self.fonts[font_name]
@@ -63,11 +89,12 @@ class InfoWindow:
         roboto = self.getCWD()+"/fonts/roboto/Roboto-"
         self.fonts = {
 
-            'robotoBlack24': ImageFont.truetype(roboto+"Black.ttf", 24),
-            'robotoBlack18': ImageFont.truetype(roboto+"Black.ttf", 18),
-            'robotoRegular18': ImageFont.truetype(roboto+"Regular.ttf", 18),
-            'robotoRegular14': ImageFont.truetype(roboto+"Regular.ttf", 14),
-            'robotoBlack48': ImageFont.truetype(roboto+"Black.ttf", 48)
+            'robotoBlack18': ImageFont.truetype(roboto + "Black.ttf", 18),
+            'robotoBlack24': ImageFont.truetype(roboto + "Black.ttf", 24),
+            'robotoBlack54': ImageFont.truetype(roboto + "Black.ttf", 54),
+            'robotoRegular18': ImageFont.truetype(roboto + "Regular.ttf", 18),
+            'robotoRegular14': ImageFont.truetype(roboto + "Regular.ttf", 14),
+            'robotoRegular22': ImageFont.truetype(roboto + "Regular.ttf", 22),
         }
 
     def truncate(self, string, font, max_size):
@@ -95,7 +122,6 @@ class InfoWindow:
         if new_image_found:
             logging.info("New information in the image detected. Updating the screen.")
             self.image.save(self.tmpImagePath)
-            self.epd.display_frame(self.epd.get_frame_buffer(self.image))
-            self.epd.sleep()
+            display_frame(self.epd, self.image)
         else:
             logging.info("No new information found. Not updating the screen.")
