@@ -68,9 +68,13 @@ def main():
     iw = infowindow.InfoWindow(infowindow_opts)
 
     # Set some things
-    calendar_date_font = "robotoRegular14"
-    calendar_entry_font = "robotoRegular22"
-    tasks_font = "robotoRegular22"
+    weather_font = "robotoBlack18"
+    temperature_font = "robotoBlack54"
+    calendar_date_font = "robotoBlack14"
+    calendar_entry_font = "robotoBlack22"
+    calendar_entry_font_highlited = "robotoBlack22"
+    tasks_font = "robotoBlack22"
+    tasks_font_highlited = "robotoBlack22"
 
     # Weather Grid
     temp_rect_width = 128
@@ -108,11 +112,13 @@ def main():
     for todo_item in todo_items:
         color = 'black'
         if 'today' in list(todo_item.keys()):
+            current_font = tasks_font
             if todo_item['today']:
                 color = 'red'
+                current_font = tasks_font_highlited
 
         iw.text(416, (current_task_y + infowindow_opts["cell_spacing"]), todo_item['content'].strip(),
-                tasks_font, color)
+                current_font, color)
         iw.line(408, (current_task_y + line_height + 1), 800, (current_task_y + line_height + 1), 'black')
 
         # set next loop height
@@ -143,8 +149,10 @@ def main():
 
     current_calendar_y = 92
     for cal_item in cal_items:
+        current_font = calendar_entry_font
         font_color = 'black'
         if cal_item['today']:
+            current_font = calendar_entry_font_highlited
             font_color = calendar_opts['today_text_color']
             iw.rectangle(0, current_calendar_y,
                          391, (current_calendar_y + line_height),
@@ -172,8 +180,8 @@ def main():
         max_event_text_length = 391 - calendar_event_text_start - infowindow_opts["cell_spacing"]
         iw.text(calendar_event_text_start,
                 (current_calendar_y + ((line_height - it_y) / 2)),
-                iw.truncate(cal_item['content'].strip(), calendar_entry_font, max_event_text_length),
-                calendar_entry_font, font_color)
+                iw.truncate(cal_item['content'].strip(), current_font, max_event_text_length),
+                current_font, font_color)
 
         # set new line height for next round
         current_calendar_y = (current_calendar_y + line_height + 2)
@@ -200,33 +208,33 @@ def main():
     deg_symbol = "°"
     iw.bitmap(2, 2, weather['icon'])
     iw.text(90, 2, weather['description'].title().strip(), 'robotoBlack24', 'black')
-    iw.text(90, 35, weather['sunrise'], 'robotoRegular18', 'black')
-    iw.text(192, 35, weather['sunset'], 'robotoRegular18', 'black')
+    iw.text(90, 35, weather['sunrise'], weather_font, 'black')
+    iw.text(192, 35, weather['sunset'], weather_font, 'black')
 
     # Temp ( adjust for str length )
     temp_string = str(weather['temp_cur']) + deg_symbol
-    (t_x, t_y) = iw.getFont('robotoBlack54').getsize(temp_string)
+    (t_x, t_y) = iw.getFont(temperature_font).getsize(temp_string)
     temp_left = (iw.width / 2) - (t_x / 2)
-    iw.text(temp_left, 2, temp_string, 'robotoBlack54', 'white')
+    iw.text(temp_left, 2, temp_string, temperature_font, 'white')
     t_desc_posx = (temp_left + t_x) - 18
     iw.text(t_desc_posx, 28, u_temp, 'robotoBlack24', 'white')
 
     # Wind
     iw.bitmap(480, 0, "windSmall.bmp")  # Wind Icon
-    iw.text(520, 5, weather['wind']['dir'], 'robotoBlack18', 'black')
-    iw.text(480, 35, str(weather['wind']['speed']) + u_speed, 'robotoRegular18', 'black')
+    iw.text(520, 5, weather['wind']['dir'], weather_font, 'black')
+    iw.text(480, 35, str(weather['wind']['speed']) + u_speed, weather_font, 'black')
     iw.line(576, 0, 576, 64, 'black')  # Third Vertical Line
 
     # Rain
     iw.bitmap(616, 0, "rainSmall.bmp")  # Rain Icon
-    iw.text(601, 29, "1hr: " + str(weather['rain']['1h']), 'robotoRegular18', 'black')
-    iw.text(601, 44, "3hr: " + str(weather['rain']['3h']), 'robotoRegular18', 'black')
+    iw.text(601, 29, "1hr: " + str(weather['rain']['1h']), weather_font, 'black')
+    iw.text(601, 44, "3hr: " + str(weather['rain']['3h']), weather_font, 'black')
     iw.line(687, 0, 687, 64, 'black')  # Fourth Vertical Line
 
     # Snow
     iw.bitmap(728, 0, "snowSmall.bmp")  # Snow Icon
-    iw.text(716, 29, "1hr: " + str(weather['snow']['1h']), 'robotoRegular18', 'black')
-    iw.text(716, 44, "3hr: " + str(weather['snow']['3h']), 'robotoRegular18', 'black')
+    iw.text(716, 29, "1hr: " + str(weather['snow']['1h']), weather_font, 'black')
+    iw.text(716, 44, "3hr: " + str(weather['snow']['3h']), weather_font, 'black')
 
     # Write to screen
     # =========================================================================
