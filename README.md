@@ -34,8 +34,15 @@ Clone this repo onto your raspberry pi. Does not really matter where it is, but 
 directory: `/home/pi/InfoWindow`
 
 ### Setup python modules
-Run `pip install -r requirements.txt`. This should install all required modules. I stuck to basic standard modules for
+Run the following commands to install the requirements. I stuck to basic standard modules for
 ease of installation.
+```
+cd /home/pi/InfoWindow
+export CFLAGS=-fcommon
+sudo apt install python3-dev
+python3 -m venv venv
+pip install -r requirements.txt
+```
 
 ## Configuration
 You will need to configure a few things such as API Keys and location. Copy config.json-sample to config.json. Edit
@@ -53,18 +60,24 @@ Always displaying the same colors at the same spots might have some negative eff
 this, there is a simple additional script, which displays all three colors on the whole screen: I recommend to let
 this run once every night, i.e. at 1 minute past 5 with:
 * Run `crontab -e`
-* insert `1 5 * * * /usr/bin/python /home/pi/InfoWindow/screensaver.py > /dev/null 2>&1`
+* insert `1   5 * * * /home/pi/InfoWindow/venv/bin/python3 /home/pi/InfoWindow/screensaver.py > /dev/null 2>&1`
 
 ### General
 * rotation: 0 - This is the rotation of the display in degrees. Leave at zero if you use it as a desktop display. Change
 to 180 if you have it mounted and hanging from a shelf.
 * timeformat: 12h / 24h
-* charset: utf-8 (or something else). I.e. to get äöü working, use latin1
 
 ### Todo (Module)
 Todoist is the current active module in this code. It only requires `api_key`. Teamwork also requires a 'site' key. If
 using google tasks, leave this as null `todo: null`
 * api_key: Enter your todoist API key.
+
+There is a bug in the Google API which will prevent to show repeated Tasks once one is marked as completed. See (and
+upvote): 
+* https://support.google.com/calendar/thread/3706294
+* https://support.google.com/calendar/thread/4113489
+* https://support.google.com/calendar/thread/111623199
+* https://support.google.com/calendar/thread/113398139
 
 ### Weather (Module)
 Open Weather Map is where the data is coming from in the default module. This requires a few keys.
@@ -96,5 +109,4 @@ completed you will want to add this to CRON so it runs every few minutes automat
 
 ### Cron Run (Normal use)
 * Run `crontab -e`
-* insert `*/6 * * * * /usr/bin/python /home/pi/InfoWindow/infowindow.py --cron` 
-
+* insert `*/6 * * * * /home/pi/InfoWindow/venv/bin/python3 /home/pi/InfoWindow/infowindow.py --cron > /dev/null 2>&1` 

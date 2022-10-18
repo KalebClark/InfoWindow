@@ -1,4 +1,4 @@
-from driver import epd7in5b
+from driver import epd7in5b_V2
 from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
@@ -10,51 +10,67 @@ import tempfile
 
 class InfoWindow:
     def __init__(self, options):
-        self.epd = epd7in5b.EPD()
+        self.epd = epd7in5b_V2.EPD()
         self.epd.init()
-        self.width = 640
-        self.height = 384
-        self.image = Image.new('L', (640, 384), 255)
-        self.draw = ImageDraw.Draw(self.image)
+        self.width = 800
+        self.height = 480
+        self.red_image = Image.new(mode="1", size=(800, 480), color=1)
+        self.black_image = Image.new(mode="1", size=(800, 480), color=1)
+        self.red_draw = ImageDraw.Draw(self.red_image)
+        self.black_draw = ImageDraw.Draw(self.black_image)
         self.fonts = {}
         self.initFonts()
-        self.tmpImagePath = os.path.join(tempfile.gettempdir(), "InfoWindow.png")
+        self.tmpImagePathRed = os.path.join(tempfile.gettempdir(), "InfoWindowRed.png")
+        self.tmpImagePathBlack = os.path.join(tempfile.gettempdir(), "InfoWindowBlack.png")
         self.timeformat = options['timeformat']
 
     def getCWD(self):
         path = os.path.dirname(os.path.realpath(sys.argv[0]))
         return path
 
-    def getImage(self):
-        return self.image
-
-    def getDraw(self):
-        return self.draw
-
-    def getEpd(self):
-        return self.epd
-
-    def line(self, left_1, top_1, left_2, top_2, fill, width=1):
-        self.draw.line((left_1, top_1, left_2, top_2), fill=fill)
+    def line(self, left_1, top_1, left_2, top_2, fill):
+        if fill == 'black':
+            self.black_draw.line((left_1, top_1, left_2, top_2), fill=0)
+        elif fill == 'red':
+            self.red_draw.line((left_1, top_1, left_2, top_2), fill=0)
+        elif fill == 'white':
+            self.black_draw.line((left_1, top_1, left_2, top_2), fill=1)
+            self.red_draw.line((left_1, top_1, left_2, top_2), fill=1)
 
     def rectangle(self, tl, tr, bl, br, fill):
-        self.draw.rectangle(((tl, tr), (bl, br)), fill=fill)
+        if fill == 'black':
+            self.black_draw.rectangle(((tl, tr), (bl, br)), fill=0)
+        elif fill == 'red':
+            self.red_draw.rectangle(((tl, tr), (bl, br)), fill=0)
+        elif fill == 'white':
+            self.black_draw.rectangle(((tl, tr), (bl, br)), fill=1)
+            self.red_draw.rectangle(((tl, tr), (bl, br)), fill=1)
 
     def text(self, left, top, text, font, fill):
-        font = self.fonts[font]
-        self.draw.text((left, top), text, font=font, fill=fill)
-        return self.draw.textsize(text, font=font)
+        if fill == 'black':
+            font = self.fonts[font]
+            self.black_draw.text((left, top), text, font=font, fill=0)
+            return self.black_draw.textsize(text, font=font)
+        elif fill == 'red':
+            font = self.fonts[font]
+            self.black_draw.text((left, top), text, font=font, fill=0)
+            self.red_draw.text((left, top), text, font=font, fill=0)
+            return self.red_draw.textsize(text, font=font)
+        elif fill == 'white':
+            font = self.fonts[font]
+            self.red_draw.text((left, top), text, font=font, fill=1)
+            self.black_draw.text((left, top), text, font=font, fill=1)
+            return self.red_draw.textsize(text, font=font)
 
     def rotate(self, angle):
-        self.image.rotate(angle)
-
-    # def chord(self, x, y, xx, yy, xxx, yyy, fill):
-    #     self.draw.chord((x, y, xx, yy), xxx, yyy, fill)
+        self.red_image.rotate(angle)
+        self.black_image.rotate(angle)
 
     def bitmap(self, x, y, image_path):
         bitmap = Image.open(self.getCWD()+"/icons/"+image_path)
         # self.image.paste((0, 0), (x, y), 'black', bitmap)
-        self.draw.bitmap((x, y), bitmap)
+        # self.draw.bitmap((x, y), bitmap, fill=(0, 0, 0))
+        self.black_draw.bitmap((x, y), bitmap, fill=0)
 
     def getFont(self, font_name):
         return self.fonts[font_name]
@@ -63,11 +79,12 @@ class InfoWindow:
         roboto = self.getCWD()+"/fonts/roboto/Roboto-"
         self.fonts = {
 
-            'robotoBlack24': ImageFont.truetype(roboto+"Black.ttf", 24),
-            'robotoBlack18': ImageFont.truetype(roboto+"Black.ttf", 18),
-            'robotoRegular18': ImageFont.truetype(roboto+"Regular.ttf", 18),
-            'robotoRegular14': ImageFont.truetype(roboto+"Regular.ttf", 14),
-            'robotoBlack48': ImageFont.truetype(roboto+"Black.ttf", 48)
+            'robotoBlack14': ImageFont.truetype(roboto + "Black.ttf", 14),
+            'robotoBlack18': ImageFont.truetype(roboto + "Black.ttf", 18),
+            'robotoBold22': ImageFont.truetype(roboto + "Bold.ttf", 22),
+            'robotoBlack22': ImageFont.truetype(roboto + "Black.ttf", 22),
+            'robotoBlack24': ImageFont.truetype(roboto + "Black.ttf", 24),
+            'robotoBlack54': ImageFont.truetype(roboto + "Black.ttf", 54),
         }
 
     def truncate(self, string, font, max_size):
@@ -83,19 +100,30 @@ class InfoWindow:
         return string
 
     def display(self, angle):
-        self.image = self.image.rotate(angle)
+        self.black_image = self.black_image.rotate(angle)
+        self.red_image = self.red_image.rotate(angle)
 
-        new_image_found = True
-        if os.path.exists(self.tmpImagePath):
-            old_image = Image.open(self.tmpImagePath)
-            diff = ImageChops.difference(self.image, old_image)
-            if not diff.getbbox():
-                new_image_found = False
+        new_image_found = False
+        if os.path.exists(self.tmpImagePathRed):
+            diff = ImageChops.difference(self.red_image, Image.open(self.tmpImagePathRed))
+            if diff.getbbox():
+                new_image_found = True
+        else:
+            new_image_found = True
+
+        if os.path.exists(self.tmpImagePathBlack):
+            diff = ImageChops.difference(self.black_image, Image.open(self.tmpImagePathBlack))
+            if diff.getbbox():
+                new_image_found = True
+        else:
+            new_image_found = True
 
         if new_image_found:
             logging.info("New information in the image detected. Updating the screen.")
-            self.image.save(self.tmpImagePath)
-            self.epd.display_frame(self.epd.get_frame_buffer(self.image))
+            self.black_image.save(self.tmpImagePathBlack)
+            self.red_image.save(self.tmpImagePathRed)
+            self.epd.display(self.epd.getbuffer(self.black_image), self.epd.getbuffer(self.red_image))
             self.epd.sleep()
+
         else:
             logging.info("No new information found. Not updating the screen.")
