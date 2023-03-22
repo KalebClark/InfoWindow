@@ -13,7 +13,7 @@ to the data. In your face reminder.
   <a href="#features">Features</a> |
   <a href="#installation">Installation</a> | 
   <a href="#configuration">Configuration</a> | 
-  <a href="#running">Running</a> | 
+  <a href="#running">Running</a>
 </div>
 
 ## Features
@@ -29,6 +29,11 @@ to the data. In your face reminder.
 ### Raspberry Pi setup
 Activate SPI on your Raspberry Pi by using the `raspi-config` tool under Interface Options and reboot.
 
+Also for some RaspiOS versions, you have to install the `libopenjp2-7` package: 
+```
+sudo apt-get install libopenjp2-7
+```
+
 ### Get software
 Clone this repo onto your raspberry pi. Does not really matter where it is, but good option is in the `pi` users home
 directory: `/home/pi/InfoWindow`
@@ -41,6 +46,7 @@ cd /home/pi/InfoWindow
 export CFLAGS=-fcommon
 sudo apt install python3-dev
 python3 -m venv venv
+. activate/bin/activate
 pip install -r requirements.txt
 ```
 
