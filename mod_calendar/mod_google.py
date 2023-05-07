@@ -55,7 +55,7 @@ class Cal:
 
                 events[start] = event
 
-        # 2019-11-05T10:00:00-08:00
+        day_start_ts_now = dt.timestamp(dt.now().replace(hour=0, minute=0, second=0, microsecond=0))
 
         for event_key in sorted(events.keys()):
             start = events[event_key]['start'].get('dateTime', events[event_key]['start'].get('date'))
@@ -72,11 +72,14 @@ class Cal:
                 st_date = dt.strftime(dtparse(start), format='%d.%m')
                 st_time = dt.strftime(dtparse(start), format='%H:%M')
 
+            event_start_ts_now = dt.timestamp(dtparse(start).replace(hour=0, minute=0, second=0, microsecond=0))
+
             items.append({
                 "date": st_date,
                 "time": st_time,
                 "content": events[event_key]['summary'],
-                "today": today
+                "today": today,
+                "weeks_away": (event_start_ts_now - day_start_ts_now) // 604800
             })
 
         return items

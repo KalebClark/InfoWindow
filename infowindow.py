@@ -150,6 +150,7 @@ def main():
     def render_calendar(x_min, x_max, loop_start=0):
         current_index = 0
         current_calendar_y = 92
+        current_weeks_away = -1
         loop_date_time_width = x_min + date_time_width
 
         current_font = calendar_entry_font
@@ -163,11 +164,22 @@ def main():
                              calendar_opts['today_background_color'])
 
             # draw horizontal line
-            iw.line(x_min, (current_calendar_y + line_height + 1), x_max, (current_calendar_y + line_height + 1), 'black')
+            # on first run, set current_weeks_away to first event weeks
+            if current_weeks_away < 0:
+                current_weeks_away = cal_item['weeks_away']
+
+            if current_weeks_away != cal_item['weeks_away']:
+                # override the black line with red since the "weeks away" number changed
+                current_weeks_away = cal_item['weeks_away']
+                iw.line(x_min, (current_calendar_y - 1), x_max, (current_calendar_y - 1), 'red')
+
+            iw.line(x_min, (current_calendar_y + line_height + 1), x_max, (current_calendar_y + line_height + 1),
+                    'black')
 
             # draw vertical line
             iw.line((loop_date_time_width + (2 * infowindow_opts["cell_spacing"]) + 1), current_calendar_y,
-                    (loop_date_time_width + (2 * infowindow_opts["cell_spacing"]) + 1), (current_calendar_y + line_height), 'black')
+                    (loop_date_time_width + (2 * infowindow_opts["cell_spacing"]) + 1),
+                    (current_calendar_y + line_height), 'black')
 
             # draw event date
             iw.text((infowindow_opts["cell_spacing"]) + x_min,
