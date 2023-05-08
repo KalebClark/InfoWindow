@@ -171,7 +171,7 @@ def main():
             if current_weeks_away != cal_item['weeks_away']:
                 # override the black line with red since the "weeks away" number changed
                 current_weeks_away = cal_item['weeks_away']
-                iw.line(x_min, (current_calendar_y - 1), x_max, (current_calendar_y - 1), 'red')
+                iw.line(x_min, (current_calendar_y - 1), x_max, current_calendar_y, 'red')
 
             iw.line(x_min, (current_calendar_y + line_height + 1), x_max, (current_calendar_y + line_height + 1),
                     'black')
