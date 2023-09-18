@@ -39,7 +39,7 @@ class Cal:
 
         for id in calendar_ids:
             result = service.events().list(calendarId=id, timeMin=now,
-                                           maxResults=20,
+                                           maxResults=30,
                                            singleEvents=True,
                                            orderBy='startTime').execute()
 

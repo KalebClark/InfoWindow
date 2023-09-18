@@ -5,6 +5,7 @@
 Rapsberry pi powered e-ink display for displaying information in an always on state. There are several other iterations
 of this project online, but they didnt do quite what I wanted them to. This is my version. Also keeping up my python
 skills as they dont get used as much as they used to!
+*Please be aware that this version is built for the v2 version of the e-ink screen!*
 
 The functionality is not meant to be an "end all solution for calendaring and Todo lists" The intent is to provide an
 *always  on* display to show me what is coming up next. I can then check in browser, phone, etc for details and updates
