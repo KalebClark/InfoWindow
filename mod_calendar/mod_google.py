@@ -15,6 +15,7 @@ class Cal:
         self.timeformat = options["timeformat"]
         self.additional = options["additional"]
         self.ignored = options["ignored"]
+        self.sunday_first_dow = options["sunday_first_dow"]
 
     def list(self):
         calendar_ids = []
@@ -59,18 +60,23 @@ class Cal:
 
         for event_key in sorted(events.keys()):
             start = events[event_key]['start'].get('dateTime', events[event_key]['start'].get('date'))
-            if int(dt.strftime(dtparse(start), format='%Y%m%d')) <= int(dt.strftime(dt.today(), format='%Y%m%d')):
+            if int(dt.strftime(dtparse(start), '%Y%m%d')) <= int(dt.strftime(dt.today(), '%Y%m%d')):
                 today = True
             else:
                 today = False
 
             # Sunrise and Sunset.
             if self.timeformat == "12h":
-                st_date = dt.strftime(dtparse(start), format='%m-%d')
-                st_time = dt.strftime(dtparse(start), format='%I:%M %p')
+                st_date = dt.strftime(dtparse(start), '%m-%d')
+                st_time = dt.strftime(dtparse(start), '%I:%M %p')
             else:
-                st_date = dt.strftime(dtparse(start), format='%d.%m')
-                st_time = dt.strftime(dtparse(start), format='%H:%M')
+                st_date = dt.strftime(dtparse(start), '%d.%m')
+                st_time = dt.strftime(dtparse(start), '%H:%M')
+
+            if self.sunday_first_dow:
+                week = dt.strftime(dtparse(start), '%U')
+            else:
+                week = dt.strftime(dtparse(start), '%W')
 
             event_start_ts_now = dt.timestamp(dtparse(start).replace(hour=0, minute=0, second=0, microsecond=0))
 
@@ -79,7 +85,9 @@ class Cal:
                 "time": st_time,
                 "content": events[event_key]['summary'],
                 "today": today,
-                "weeks_away": (event_start_ts_now - day_start_ts_now) // 604800
+                "week": week,
+                "days_away": (event_start_ts_now - day_start_ts_now) // 86400, # days away
+                "weeks_away": (event_start_ts_now - day_start_ts_now) // 604800 # weeks away
             })
 
         return items

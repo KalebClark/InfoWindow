@@ -32,6 +32,7 @@ weather_opts = config_data["weather"]
 infowindow_opts = {}
 # give the timeformat to all the modules needing it
 calendar_opts["timeformat"] = config_data["general"]["timeformat"]
+calendar_opts["sunday_first_dow"] = config_data["general"]["sunday_first_dow"]
 weather_opts["timeformat"] = config_data["general"]["timeformat"]
 infowindow_opts["timeformat"] = config_data["general"]["timeformat"]
 infowindow_opts["cell_spacing"] = config_data["general"]["cell_spacing"]
@@ -150,7 +151,9 @@ def main():
     def render_calendar(x_min, x_max, loop_start=0):
         current_index = 0
         current_calendar_y = 92
+        current_days_away = -1
         current_weeks_away = -1
+        current_week = -1
         loop_date_time_width = x_min + date_time_width
 
         current_font = calendar_entry_font
@@ -163,16 +166,40 @@ def main():
                              x_max, (current_calendar_y + line_height),
                              calendar_opts['today_background_color'])
 
-            # draw horizontal line
-            # on first run, set current_weeks_away to first event weeks
+            # draw horizontal line(s) at the top
+            # on first run, initialize several vars with the first values from the first event
+            if current_days_away < 0:
+                current_days_away = cal_item['days_away']
             if current_weeks_away < 0:
                 current_weeks_away = cal_item['weeks_away']
+            if current_week < 0:
+                current_week = cal_item['week']
 
+            # per default, draw a dashed line (same day event)
+            for x in range(x_min, x_max, 8):
+                iw.line(x, (current_calendar_y + line_height + 1), x+4, (current_calendar_y + line_height + 1),
+                        'black')
+                # iw.line(x+5, (current_calendar_y + line_height + 1), x+8, (current_calendar_y + line_height + 1),
+                #         'white')
+
+            # override the dotted line with a black line since the "days away" number changed
+            if current_days_away != cal_item['days_away']:
+                current_days_away = cal_item['days_away']
+                iw.line(x_min, (current_calendar_y + line_height + 1), x_max, (current_calendar_y + line_height + 1),
+                        'black')
+
+            # override the dotted line with a black rectangle ("thicker line") since the week changed number changed
+            if current_week != cal_item['week']:
+                current_week = cal_item['week']
+                iw.rectangle(x_min, (current_calendar_y - 1), x_max, current_calendar_y, 'black')
+
+            # override the black line with a red a rectangle ("thicker line") the "weeks away" number changed
             if current_weeks_away != cal_item['weeks_away']:
-                # override the black line with red since the "weeks away" number changed
                 current_weeks_away = cal_item['weeks_away']
                 iw.rectangle(x_min, (current_calendar_y - 1), x_max, current_calendar_y, 'red')
 
+            # draw ending horizontal line, just to ensure that the last element is not hanging in the air
+            # this gets overridden almost all the time
             iw.line(x_min, (current_calendar_y + line_height + 1), x_max, (current_calendar_y + line_height + 1),
                     'black')
 

@@ -2,6 +2,7 @@
     "general": {
         "rotation": 180,
         "timeformat": "12h",
+        "sunday_first_dow": false,
         "cell_spacing": 2
     },
     "todo": {
