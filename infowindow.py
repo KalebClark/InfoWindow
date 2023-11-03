@@ -179,6 +179,7 @@ def main():
             if first_loop:
                 # don't draw a line at the top of the first event
                 first_loop = False
+                divider_str = "initial element"
             else:
                 # per default, draw a dashed line (same day event)
                 divider_str = "same day"
