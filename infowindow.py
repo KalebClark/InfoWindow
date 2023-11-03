@@ -212,7 +212,7 @@ def main():
                         iw.rectangle(x + 4, (current_calendar_y - 1), x + 7, current_calendar_y, 'red')
                 else:
                     divider_str = "in one week"
-                    iw.line(x_min, (current_calendar_y - 1), x_max, (current_calendar_y - 1), 'red')
+                    iw.rectangle(x_min, (current_calendar_y - 1), x_max, current_calendar_y, 'red')
 
             # draw ending horizontal line, just to ensure that the last element is not hanging in the air
             # this gets overridden almost all the time
