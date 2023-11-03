@@ -176,26 +176,30 @@ def main():
                 current_week = cal_item['week']
 
             # per default, draw a dashed line (same day event)
+            divider_str = "same day"
             for x in range(x_min, x_max, 8):
-                iw.line(x, (current_calendar_y + line_height + 1), x+4, (current_calendar_y + line_height + 1),
+                iw.line(x, (current_calendar_y + line_height + 1), x+3, (current_calendar_y + line_height + 1),
                         'black')
-                iw.line(x+5, (current_calendar_y + line_height + 1), x+8, (current_calendar_y + line_height + 1),
+                iw.line(x+4, (current_calendar_y + line_height + 1), x+7, (current_calendar_y + line_height + 1),
                         'white')
 
             # override the dotted line with a black line since the "days away" number changed
             if current_days_away != cal_item['days_away']:
                 current_days_away = cal_item['days_away']
+                divider_str = "new day"
                 iw.line(x_min, (current_calendar_y + line_height + 1), x_max, (current_calendar_y + line_height + 1),
                         'black')
 
             # override the dotted line with a black rectangle ("thicker line") since the week changed number changed
             if current_week != cal_item['week']:
                 current_week = cal_item['week']
+                divider_str = "new week day"
                 iw.rectangle(x_min, (current_calendar_y - 1), x_max, current_calendar_y, 'black')
 
             # override the black line with a red a rectangle ("thicker line") the "weeks away" number changed
             if current_weeks_away != cal_item['weeks_away']:
                 current_weeks_away = cal_item['weeks_away']
+                divider_str = "in one week"
                 iw.rectangle(x_min, (current_calendar_y - 1), x_max, current_calendar_y, 'red')
 
             # draw ending horizontal line, just to ensure that the last element is not hanging in the air
@@ -227,7 +231,7 @@ def main():
             # set new line height for next round
             current_calendar_y = (current_calendar_y + line_height + 2)
             # logging.debug("ITEM: "+str(cal_item['date']), str(cal_item['time']), str(cal_item['content']))
-            logging.debug("ITEM: %s" % cal_item['content'].strip())
+            logging.debug("ITEM (%s): %s" % (divider_str, cal_item['content'].strip()))
             current_index = cal_items.index(cal_item)
             if current_calendar_y > 480:
                 logging.debug("Max height detected, breaking loop")
