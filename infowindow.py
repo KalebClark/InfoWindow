@@ -155,6 +155,7 @@ def main():
         current_weeks_away = -1
         current_week = -1
         loop_date_time_width = x_min + date_time_width
+        first_loop = True
 
         current_font = calendar_entry_font
         for cal_item in cal_items[loop_start:]:
@@ -175,11 +176,15 @@ def main():
             if current_week < 0:
                 current_week = cal_item['week']
 
-            # per default, draw a dashed line (same day event)
-            divider_str = "same day"
-            for x in range(x_min, x_max, 8):
-                iw.line(x, current_calendar_y, x+3, current_calendar_y, 'black')
-                iw.line(x+4, current_calendar_y, x+7, current_calendar_y, 'white')
+            if first_loop:
+                # don't draw a line at the top of the first event
+                first_loop = False
+            else:
+                # per default, draw a dashed line (same day event)
+                divider_str = "same day"
+                for x in range(x_min, x_max, 8):
+                    iw.line(x, current_calendar_y, x+3, current_calendar_y, 'black')
+                    iw.line(x+4, current_calendar_y, x+7, current_calendar_y, 'white')
 
             # override the dotted line with a black line since the "days away" number changed
             if current_days_away != cal_item['days_away']:
@@ -201,7 +206,7 @@ def main():
 
             # draw ending horizontal line, just to ensure that the last element is not hanging in the air
             # this gets overridden almost all the time
-            iw.line(x_min, (current_calendar_y + line_height + 1), x_max, (current_calendar_y + line_height + 1),
+            iw.line(x_min, (current_calendar_y + line_height + 2), x_max, (current_calendar_y + line_height + 2),
                     'black')
 
             # draw vertical line
