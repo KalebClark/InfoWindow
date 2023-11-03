@@ -178,17 +178,14 @@ def main():
             # per default, draw a dashed line (same day event)
             divider_str = "same day"
             for x in range(x_min, x_max, 8):
-                iw.line(x, (current_calendar_y + line_height + 1), x+3, (current_calendar_y + line_height + 1),
-                        'black')
-                iw.line(x+4, (current_calendar_y + line_height + 1), x+7, (current_calendar_y + line_height + 1),
-                        'white')
+                iw.line(x, current_calendar_y, x+3, current_calendar_y, 'black')
+                iw.line(x+4, current_calendar_y, x+7, current_calendar_y, 'white')
 
             # override the dotted line with a black line since the "days away" number changed
             if current_days_away != cal_item['days_away']:
                 current_days_away = cal_item['days_away']
                 divider_str = "new day"
-                iw.line(x_min, (current_calendar_y + line_height + 1), x_max, (current_calendar_y + line_height + 1),
-                        'black')
+                iw.line(x_min, current_calendar_y, x_max, current_calendar_y, 'black')
 
             # override the dotted line with a black rectangle ("thicker line") since the week changed number changed
             if current_week != cal_item['week']:
