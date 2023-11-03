@@ -179,8 +179,8 @@ def main():
             for x in range(x_min, x_max, 8):
                 iw.line(x, (current_calendar_y + line_height + 1), x+4, (current_calendar_y + line_height + 1),
                         'black')
-                # iw.line(x+5, (current_calendar_y + line_height + 1), x+8, (current_calendar_y + line_height + 1),
-                #         'white')
+                iw.line(x+5, (current_calendar_y + line_height + 1), x+8, (current_calendar_y + line_height + 1),
+                        'white')
 
             # override the dotted line with a black line since the "days away" number changed
             if current_days_away != cal_item['days_away']:
