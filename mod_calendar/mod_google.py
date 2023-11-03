@@ -85,7 +85,7 @@ class Cal:
                 "time": st_time,
                 "content": events[event_key]['summary'],
                 "today": today,
-                "week": week,
+                "week": int(week),
                 "days_away": (event_start_ts_now - day_start_ts_now) // 86400, # days away
                 "weeks_away": (event_start_ts_now - day_start_ts_now) // 604800 # weeks away
             })
