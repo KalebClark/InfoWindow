@@ -199,11 +199,20 @@ def main():
                 divider_str = "new week day"
                 iw.rectangle(x_min, (current_calendar_y - 1), x_max, current_calendar_y, 'black')
 
-            # override the black line with a red a rectangle ("thicker line") the "weeks away" number changed
+            # check if the new event is a week away  (the "weeks away" number changed)
             if current_weeks_away != cal_item['weeks_away']:
+                # override the black line with a red a rectangle ("thicker line") the "weeks away" number changed
                 current_weeks_away = cal_item['weeks_away']
-                divider_str = "in one week"
-                iw.rectangle(x_min, (current_calendar_y - 1), x_max, current_calendar_y, 'red')
+
+                # decide on style depending on what the option above was
+                if current_week != cal_item['week']:
+                    divider_str = "in one week and the week changes"
+                    for x in range(x_min, x_max, 8):
+                        iw.rectangle(x, (current_calendar_y - 1), x + 3, current_calendar_y, 'black')
+                        iw.rectangle(x + 4, (current_calendar_y - 1), x + 7, current_calendar_y, 'red')
+                else:
+                    divider_str = "in one week"
+                    iw.line(x_min, (current_calendar_y - 1), x_max, (current_calendar_y - 1), 'red')
 
             # draw ending horizontal line, just to ensure that the last element is not hanging in the air
             # this gets overridden almost all the time
