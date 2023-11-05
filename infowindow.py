@@ -211,9 +211,9 @@ def main():
                 # decide on style depending on what the option above was
                 if new_week:
                     divider_str = "in one week and the week changes"
-                    for x in range(x_min, x_max, 32):
-                        iw.rectangle(x, (current_calendar_y - 1), x + 15, current_calendar_y, 'black')
-                        iw.rectangle(x + 16, (current_calendar_y - 1), x + 31, current_calendar_y, 'red')
+                    for x in range(x_min, x_max, 46):
+                        iw.rectangle(x, (current_calendar_y - 1), x + 22, current_calendar_y, 'black')
+                        iw.rectangle(x + 23, (current_calendar_y - 1), x + 45, current_calendar_y, 'red')
                 else:
                     divider_str = "in one week"
                     # iw.rectangle(x_min, (current_calendar_y - 1), x_max, current_calendar_y, 'red')
