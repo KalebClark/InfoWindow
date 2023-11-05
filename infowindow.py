@@ -186,9 +186,9 @@ def main():
             else:
                 # per default, draw a dashed line (same day event)
                 divider_str = "same day"
-                for x in range(x_min, x_max, 8):
-                    iw.line(x, current_calendar_y, x+3, current_calendar_y, 'black')
-                    iw.line(x+4, current_calendar_y, x+7, current_calendar_y, 'white')
+                for x in range(x_min, x_max, 23):
+                    iw.line(x, current_calendar_y, x + 11, current_calendar_y, 'black')
+                    iw.line(x + 12, current_calendar_y, x + 23, current_calendar_y, 'white')
 
             # override the dotted line with a black line since the "days away" number changed
             if current_days_away != cal_item['days_away']:
