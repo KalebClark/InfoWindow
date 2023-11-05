@@ -156,10 +156,13 @@ def main():
         current_week = -1
         loop_date_time_width = x_min + date_time_width
         first_loop = True
+        new_week = False
 
         current_font = calendar_entry_font
         for cal_item in cal_items[loop_start:]:
             font_color = 'black'
+            new_week = False
+
             if cal_item['today']:
                 current_font = calendar_entry_font_highlited
                 font_color = calendar_opts['today_text_color']
@@ -197,6 +200,7 @@ def main():
             if current_week != cal_item['week']:
                 current_week = cal_item['week']
                 divider_str = "new week day"
+                new_week = True
                 iw.rectangle(x_min, (current_calendar_y - 1), x_max, current_calendar_y, 'black')
 
             # check if the new event is a week away  (the "weeks away" number changed)
@@ -205,7 +209,7 @@ def main():
                 current_weeks_away = cal_item['weeks_away']
 
                 # decide on style depending on what the option above was
-                if current_week != cal_item['week']:
+                if new_week:
                     divider_str = "in one week and the week changes"
                     for x in range(x_min, x_max, 8):
                         iw.rectangle(x, (current_calendar_y - 1), x + 3, current_calendar_y, 'black')
