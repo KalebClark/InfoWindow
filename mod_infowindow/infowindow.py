@@ -50,17 +50,17 @@ class InfoWindow:
         if fill == 'black':
             font = self.fonts[font]
             self.black_draw.text((left, top), text, font=font, fill=0)
-            return self.black_draw.textsize(text, font=font)
+            #return self.black_draw.textsize(text, font=font)
         elif fill == 'red':
             font = self.fonts[font]
             self.black_draw.text((left, top), text, font=font, fill=0)
             self.red_draw.text((left, top), text, font=font, fill=0)
-            return self.red_draw.textsize(text, font=font)
+            #return self.red_draw.textsize(text, font=font)
         elif fill == 'white':
             font = self.fonts[font]
             self.red_draw.text((left, top), text, font=font, fill=1)
             self.black_draw.text((left, top), text, font=font, fill=1)
-            return self.red_draw.textsize(text, font=font)
+            #return self.red_draw.textsize(text, font=font)
 
     def rotate(self, angle):
         self.red_image.rotate(angle)

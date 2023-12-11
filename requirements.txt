@@ -6,3 +6,4 @@ python-dateutil
 requests
 todoist-python
 RPi.GPIO
+gpiozero

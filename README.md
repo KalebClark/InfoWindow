@@ -31,7 +31,7 @@ to the data. In your face reminder.
 Activate SPI on your Raspberry Pi by using the `raspi-config` tool under Interface Options and reboot.
 
 Also for some RaspiOS versions, you have to install the `libopenjp2-7` package: 
-```
+```bash
 sudo apt-get install libopenjp2-7
 ```
 
@@ -39,10 +39,18 @@ sudo apt-get install libopenjp2-7
 Clone this repo onto your raspberry pi. Does not really matter where it is, but good option is in the `pi` users home
 directory: `/home/pi/InfoWindow`
 
+### Clone the e-Paper driver from waveshare
+Waveshare sometimes changes things in this driver. So this setup might need some updates, be aware!
+```bash
+cd /home/pi
+git clone https://github.com/waveshareteam/e-Paper.git
+ln -s /home/pi/e-Paper/RaspberryPi_JetsonNano/python/lib/waveshare_epd/ /home/pi/InfoWindow/driver
+```
+
 ### Setup python modules
 Run the following commands to install the requirements. I stuck to basic standard modules for
 ease of installation.
-```
+```bash
 cd /home/pi/InfoWindow
 export CFLAGS=-fcommon
 sudo apt install python3-dev
