@@ -40,10 +40,9 @@ Clone this repo onto your raspberry pi. Does not really matter where it is, but 
 directory: `/home/pi/InfoWindow`
 
 ### Clone the e-Paper driver from waveshare
-Waveshare sometimes changes things in this driver. So this setup might need some updates, be aware!
+Waveshare sometimes changes things in their driver. So this part might need some changes, be aware!
 ```bash
-cd /home/pi
-git clone https://github.com/waveshareteam/e-Paper.git
+git clone https://github.com/waveshareteam/e-Paper.git /home/pi/e-Paper
 ln -s /home/pi/e-Paper/RaspberryPi_JetsonNano/python/lib/waveshare_epd/ /home/pi/InfoWindow/driver
 ```
 

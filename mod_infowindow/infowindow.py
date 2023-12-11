@@ -50,17 +50,14 @@ class InfoWindow:
         if fill == 'black':
             font = self.fonts[font]
             self.black_draw.text((left, top), text, font=font, fill=0)
-            #return self.black_draw.textsize(text, font=font)
         elif fill == 'red':
             font = self.fonts[font]
             self.black_draw.text((left, top), text, font=font, fill=0)
             self.red_draw.text((left, top), text, font=font, fill=0)
-            #return self.red_draw.textsize(text, font=font)
         elif fill == 'white':
             font = self.fonts[font]
             self.red_draw.text((left, top), text, font=font, fill=1)
             self.black_draw.text((left, top), text, font=font, fill=1)
-            #return self.red_draw.textsize(text, font=font)
 
     def rotate(self, angle):
         self.red_image.rotate(angle)
@@ -68,8 +65,6 @@ class InfoWindow:
 
     def bitmap(self, x, y, image_path):
         bitmap = Image.open(self.getCWD()+"/icons/"+image_path)
-        # self.image.paste((0, 0), (x, y), 'black', bitmap)
-        # self.draw.bitmap((x, y), bitmap, fill=(0, 0, 0))
         self.black_draw.bitmap((x, y), bitmap, fill=0)
 
     def getFont(self, font_name):
@@ -90,7 +85,7 @@ class InfoWindow:
     def truncate(self, string, font, max_size):
         num_chars = len(string)
         for char in string:
-            (a, b, np_x, np_y) = self.getFont(font).getbbox(string)
+            (_unused_a, _unused_b, np_x, np_y) = self.getFont(font).getbbox(string)
             if np_x >= max_size:
                 string = string[:-1]
 
