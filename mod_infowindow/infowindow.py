@@ -90,7 +90,7 @@ class InfoWindow:
     def truncate(self, string, font, max_size):
         num_chars = len(string)
         for char in string:
-            (np_x, np_y) = self.getFont(font).getsize(string)
+            (a, b, np_x, np_y) = self.getFont(font).getbbox(string)
             if np_x >= max_size:
                 string = string[:-1]
 
