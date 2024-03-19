@@ -54,7 +54,7 @@ cd /home/pi/InfoWindow
 export CFLAGS=-fcommon
 sudo apt install python3-dev
 python3 -m venv venv
-. activate/bin/activate
+. venv/bin/activate
 pip install -r requirements.txt
 ```
 
